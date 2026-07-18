@@ -12,9 +12,9 @@ public class FingerController : MonoBehaviour
 
     private SpriteRenderer spr;
 
-    [SerializeField]bool Active;
+    private bool Active;
 
-    [SerializeField] bool isThumb = false;
+    public bool isGrabbing;
 
     void Start()
     {
@@ -36,11 +36,13 @@ public class FingerController : MonoBehaviour
         {
             holdTimer -= Time.deltaTime;
             spr.sprite = grab;
+            isGrabbing = true;
         }
         else
         {
             spr.sprite = open;
             holdTimer = holdTimerMax;
+            isGrabbing = false;
         }
     }
 }

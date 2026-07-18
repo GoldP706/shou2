@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grab : MonoBehaviour
+public class HandControllerNew : MonoBehaviour
 {
-    private bool grabCheck = false;
     private bool grabbing = false;
-    public Vector3 grabCheckPos;
     private GameObject closestObj;
+
+    [SerializeField]FingerController thumb;
+    [SerializeField]FingerController pointer;
+    [SerializeField]FingerController middle;
+    [SerializeField]FingerController ring;
+    [SerializeField]FingerController little;
 
     private float handHeight = 1f;
 
@@ -25,6 +29,23 @@ public class Grab : MonoBehaviour
         
         if(Input.GetKey(KeyCode.Mouse1)&&handHeight>1f){
             handHeight += 0.1f;
+        }
+
+        //grabbing
+        if(thumb.isGrabbing)
+        {
+            if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
+            {
+                grabbing = true;
+                if(closestObj != null)
+                {
+                    closestObj.transform.position = transform.position;
+                }
+            }
+        }
+        else
+        {
+            grabbing = false;
         }
     }
 
