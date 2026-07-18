@@ -15,6 +15,8 @@ public class HandControllerNew : MonoBehaviour
 
     private float handHeight = 1f;
 
+    private bool holdingObj = false;
+
     void Start()
     {
         
@@ -32,7 +34,7 @@ public class HandControllerNew : MonoBehaviour
         }
 
         //grabbing
-        if(thumb.isGrabbing)
+        if(thumb.isGrabbing && !holdingObj)
         {
             if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
             {
@@ -40,12 +42,14 @@ public class HandControllerNew : MonoBehaviour
                 if(closestObj != null)
                 {
                     closestObj.transform.position = transform.position;
+                    holdingObj = true;
                 }
             }
         }
         else
         {
             grabbing = false;
+            holdingObj = false;
         }
     }
 
