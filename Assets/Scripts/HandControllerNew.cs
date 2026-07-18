@@ -27,4 +27,12 @@ public class Grab : MonoBehaviour
             handHeight += 0.1f;
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "CanGrab")
+        {
+            closestObj = other.gameObject;
+        }
+    }
 }

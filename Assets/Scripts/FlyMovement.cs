@@ -88,4 +88,12 @@ public class FlyMovement : MonoBehaviour
         );
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "border")
+        {
+            Debug.Log("hit border");
+            targetDriftDirection = new Vector3(0,0,0);
+        }
+    }
 }

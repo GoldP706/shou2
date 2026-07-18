@@ -14,6 +14,8 @@ public class FingerController : MonoBehaviour
 
     [SerializeField]bool Active;
 
+    [SerializeField] bool isThumb = false;
+
     void Start()
     {
         spr = GetComponent<SpriteRenderer>();
