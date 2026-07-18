@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: eb39dcdc31fcd4fc3b32c79fcb2550bd
+guid: cf55db4034ee64a3891c9c687461486b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8353384060517103977
-    second: HandBase_0
+      213: -4307727689024165195
+    second: 4th2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -70,7 +70,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -83,7 +83,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -96,7 +96,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
+  - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HandBase_0
+      name: 4th2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -123,32 +123,28 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.55, y: 0.8}
       border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 969388f7b8e2de370800000000000000
-      internalID: 8353384060517103977
+      spriteID: 5baa99a7d70e734c0800000000000000
+      internalID: -4307727689024165195
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
-    customData: 
     physicsShape: []
     bones: []
-    spriteID: cb7d269c2670a4ad2beaca79fc00fe12
+    spriteID: bc50960e1af0b49f8b4af8bd0b98f38b
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    spriteCustomMetadata:
-      entries: []
     nameFileIdTable:
-      HandBase_0: 8353384060517103977
+      4th2_0: -4307727689024165195
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
