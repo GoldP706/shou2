@@ -20,7 +20,7 @@ public class MouseFollowRandomDrift : MonoBehaviour
     private bool mouseMoving;
 
     private float clampMouseYMin = -4.5f;
-    private float clampMouseYMax = 3.3f;
+    private float clampMouseYMax = 3f;
     private float clampMouseXMin = -7f;
     private float clampMouseXMax = 8f;
 

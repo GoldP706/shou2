@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4cf6a2be000c2421c9dd69beb58f4ac6
+guid: 466041fb88b78470888ec7c7755b27d1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sideThumb2_0
+      name: sidePointer2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1adf7eab1f5a44cef8adc104aea9ea5e
-      internalID: 1572964269
+      spriteID: df95e6513588a4f78835b5f2a1a7b7ba
+      internalID: 2138000536
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      sideThumb2_0: 1572964269
+      sidePointer2_0: 2138000536
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
