@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class HandControllerNew : MonoBehaviour
 {
-    private bool grabbing = false;
-    private GameObject closestObj;
+    public bool grabbing = false;
+    public GameObject closestObj;
+    public GameObject heldObj;
 
     [SerializeField]FingerController thumb;
     [SerializeField]FingerController pointer;
@@ -15,7 +16,7 @@ public class HandControllerNew : MonoBehaviour
 
     private float handHeight = 1f;
 
-    private bool holdingObj = false;
+    //private bool holdingObj = false;
 
     void Start()
     {
@@ -24,6 +25,7 @@ public class HandControllerNew : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(closestObj,heldObj);
         //z movement
         if(Input.GetKey(KeyCode.Mouse0)&&handHeight>0f){
             handHeight -= 0.1f;
@@ -34,23 +36,23 @@ public class HandControllerNew : MonoBehaviour
         }
 
         //grab and move
-        if(thumb.isGrabbing && !holdingObj)
+        if(thumb.isGrabbing && closestObj != null)
         {
             if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
             {
                 grabbing = true;
-                if(closestObj != null)
+                closestObj.GetComponent<TargetJoint2D>().target = transform.position;
+                if(heldObj != null)
                 {
-                    closestObj.GetComponent<TargetJoint2D>().target = transform.position;
-                    holdingObj = true;
+                    heldObj = closestObj;
+                }
+                else{
+                    grabbing = false;
+                    heldObj = null;
                 }
             }
         }
-        else
-        {
-            grabbing = false;
-            holdingObj = false;
-        }
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -58,6 +60,14 @@ public class HandControllerNew : MonoBehaviour
         if(other.gameObject.tag == "CanGrab" && closestObj == null)
         {
             closestObj = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "CanGrab")
+        {
+            closestObj = null;
         }
     }
 }

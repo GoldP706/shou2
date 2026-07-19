@@ -236,6 +236,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7ea66d64b9e54b9f8b267aba5317346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grabbing: 0
+  closestObj: {fileID: 0}
+  heldObj: {fileID: 0}
   thumb: {fileID: 3250723882063843311}
   pointer: {fileID: 6976773891224213110}
   middle: {fileID: 2958833095606171085}
@@ -913,6 +916,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7171247253947423719, guid: 01dbc92f128db414f88144b35d8690b2, type: 3}
+      propertyPath: grab
+      value: 
+      objectReference: {fileID: 440029790, guid: e940ce898ee0f47458b35da3ae90db89, type: 3}
     - target: {fileID: 7171247253947423719, guid: 01dbc92f128db414f88144b35d8690b2, type: 3}
       propertyPath: isThumb
       value: 1
