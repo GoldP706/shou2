@@ -235,6 +235,34 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
+                    "m_Id": "9d980a9313304b209aef46db1c5cb871"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "445a99a5fe28403da15458a31491a95e"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "9d980a9313304b209aef46db1c5cb871"
+                },
+                "m_SlotId": 7
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "485fcdb368274380a87af9a08688f8a4"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
                     "m_Id": "a12b3704bd7944ea934e2a00188b36b8"
                 },
                 "m_SlotId": 2
@@ -3251,7 +3279,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.10000000149011612,
+    "m_Value": 0.03999999910593033,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,

@@ -503,23 +503,23 @@ PrefabInstance:
     - target: {fileID: 2887287310917421620, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 3171294590950240278, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 3531243049556102249, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 3816191471745928527, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 4481402951524200006, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 5826902720308228089, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Name
       value: HandPrefab
@@ -567,7 +567,7 @@ PrefabInstance:
     - target: {fileID: 7047057435828955535, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
     - target: {fileID: 7381245896370764811, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: mainCamera
       value: 
@@ -923,6 +923,22 @@ PrefabInstance:
     - target: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Name
       value: RetroMario
+      objectReference: {fileID: 0}
+    - target: {fileID: 5311016557059233491, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Size.x
+      value: 3.2318697
+      objectReference: {fileID: 0}
+    - target: {fileID: 5311016557059233491, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Size.y
+      value: 6.9618444
+      objectReference: {fileID: 0}
+    - target: {fileID: 5311016557059233491, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.107007146
+      objectReference: {fileID: 0}
+    - target: {fileID: 5311016557059233491, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.00000040785292
       objectReference: {fileID: 0}
     - target: {fileID: 5947703829928099284, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Sprite
