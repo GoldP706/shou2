@@ -19,6 +19,12 @@ public class MouseFollowRandomDrift : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool mouseMoving;
 
+    private float clampMouseYMin = -4.5f;
+    private float clampMouseYMax = 3.3f;
+    private float clampMouseXMin = -7f;
+    private float clampMouseXMax = 8f;
+
+
 
     void Start()
     {
@@ -58,9 +64,13 @@ public class MouseFollowRandomDrift : MonoBehaviour
 
         mouseWorldPosition.z = transform.position.z;
 
+        var clampedMouseWorldPosition = mouseWorldPosition;
+        clampedMouseWorldPosition.y = Mathf.Clamp(mouseWorldPosition.y, clampMouseYMin, clampMouseYMax);
+        clampedMouseWorldPosition.x = Mathf.Clamp(mouseWorldPosition.x, clampMouseXMin, clampMouseXMax);
+
         transform.position = Vector3.Lerp(
             transform.position,
-            mouseWorldPosition,
+            clampedMouseWorldPosition,
             followSpeed * Time.deltaTime
         );
     }
