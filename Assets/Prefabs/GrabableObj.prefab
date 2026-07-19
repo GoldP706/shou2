@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5311016557059233491}
   - component: {fileID: 7951163106255913525}
   - component: {fileID: 3742020745520697369}
+  - component: {fileID: 6298304032139691435}
   m_Layer: 0
   m_Name: GrabableObj
   m_TagString: CanGrab
@@ -170,3 +171,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!257 &6298304032139691435
+TargetJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269237028854369917}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_Anchor: {x: 0, y: 0}
+  m_Target: {x: 0.6739, y: 0.8082}
+  m_AutoConfigureTarget: 0
+  m_MaxForce: 10000
+  m_DampingRatio: 1
+  m_Frequency: 5

@@ -92,7 +92,7 @@ public class FlyMovement : MonoBehaviour
     {
         if(other.gameObject.tag == "border")
         {
-            Debug.Log("hit border");
+            //Debug.Log("hit border");
             targetDriftDirection = new Vector3(0,0,0);
         }
     }
