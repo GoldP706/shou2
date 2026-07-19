@@ -63,11 +63,11 @@ public class HandControllerNew : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    /*void OnTriggerExit2D(Collider2D other)
     {
         if(other.gameObject.tag == "CanGrab")
         {
             closestObj = null;
         }
-    }
+    }*/
 }

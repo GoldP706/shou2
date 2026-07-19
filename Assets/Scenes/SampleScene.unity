@@ -539,6 +539,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2887287310917421620, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3171294590950240278, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3531243049556102249, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 3816191471745928527, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 4481402951524200006, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 5826902720308228089, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Name
       value: HandPrefab
@@ -583,6 +603,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7047057435828955535, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 7381245896370764811, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: mainCamera
       value: 
@@ -1079,6 +1103,10 @@ PrefabInstance:
     - target: {fileID: 7951163106255913525, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Mass
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7951163106255913525, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Constraints
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
