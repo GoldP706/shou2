@@ -8,6 +8,9 @@ public class HandControllerNew : MonoBehaviour
     public GameObject closestObj;
     public GameObject heldObj;
 
+    private AudioSource audioSource;
+    private bool sfxPlayed = false;
+
     public int handState = 0; //0 = flat, 1 = side, 2 = type
 
     [SerializeField]FingerController thumb;
@@ -20,7 +23,7 @@ public class HandControllerNew : MonoBehaviour
 
     void Start()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -62,7 +65,13 @@ public class HandControllerNew : MonoBehaviour
         }
         else{
             heldObj = null;
+            sfxPlayed = false;
         }  
+
+        if(heldObj != null && !sfxPlayed){
+            audioSource.Play();
+            sfxPlayed = true;
+        }
 
     }
 
