@@ -11,8 +11,8 @@ public class FingerController : MonoBehaviour
     public Sprite sideGrab;
     public Sprite sideOpen;
 
-    private Sprite openSprite;
-    private Sprite grabSprite;
+    public Sprite openSprite;
+    public Sprite grabSprite;
 
 
     [SerializeField] float holdTimerMax = 2f;
@@ -38,7 +38,7 @@ public class FingerController : MonoBehaviour
             openSprite = open;
             grabSprite = grab;
         }
-        else if(handController.handState == 1)//side state
+        else //if(handController.handState == 1)//side state
         {
             openSprite = sideOpen;
             grabSprite = sideGrab;

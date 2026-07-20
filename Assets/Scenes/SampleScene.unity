@@ -630,6 +630,10 @@ PrefabInstance:
       propertyPath: sideOpen
       value: 
       objectReference: {fileID: 542669133, guid: 255f3283a3d92425282a581d33e53b67, type: 3}
+    - target: {fileID: 2958833095606171085, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 3171294590950240278, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -642,6 +646,10 @@ PrefabInstance:
       propertyPath: sideOpen
       value: 
       objectReference: {fileID: -238900399, guid: b4593d1dddfc34c688f39d62be3351b7, type: 3}
+    - target: {fileID: 3250723882063843311, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 3531243049556102249, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -653,11 +661,15 @@ PrefabInstance:
     - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 
-      objectReference: {fileID: 1868770319, guid: 5094eb38fb15e4da9a4022003bd44c3c, type: 3}
+      objectReference: {fileID: 1180488772, guid: 20cc923a72e744ba5a178a5849ea3e78, type: 3}
     - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideOpen
       value: 
       objectReference: {fileID: -834215161, guid: 2c676217825ad425c81a3265874925cb, type: 3}
+    - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 4481402951524200006, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -665,11 +677,15 @@ PrefabInstance:
     - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 
-      objectReference: {fileID: 867923735, guid: 20cc923a72e744ba5a178a5849ea3e78, type: 3}
+      objectReference: {fileID: 1807466543, guid: e7e3366e9da0e45a992ade9a6c4914c0, type: 3}
     - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideOpen
       value: 
       objectReference: {fileID: -469101563, guid: e32f63d31830f450dbab0769811e0629, type: 3}
+    - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 5826902720308228089, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Name
       value: HandPrefab
@@ -722,6 +738,10 @@ PrefabInstance:
       propertyPath: sideOpen
       value: 
       objectReference: {fileID: 1425595764, guid: 1c8cc1fc5c116413882b635aaa44e715, type: 3}
+    - target: {fileID: 6976773891224213110, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 7047057435828955535, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -748,7 +768,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3787079557261455087, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 140085478809474168, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1362896320618218991, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
