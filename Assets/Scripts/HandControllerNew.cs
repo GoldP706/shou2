@@ -8,6 +8,8 @@ public class HandControllerNew : MonoBehaviour
     public GameObject closestObj;
     public GameObject heldObj;
 
+    public int handState = 0; //0 = flat, 1 = side, 2 = type
+
     [SerializeField]FingerController thumb;
     [SerializeField]FingerController pointer;
     [SerializeField]FingerController middle;
@@ -16,8 +18,6 @@ public class HandControllerNew : MonoBehaviour
 
     private float handHeight = 1f;
 
-    //private bool holdingObj = false;
-
     void Start()
     {
         
@@ -25,7 +25,16 @@ public class HandControllerNew : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(grabbing);
+        //switch hand state
+        if(Input.mouseScrollDelta.y > 0.5f){
+            handState += 1;
+            if(handState>2){handState = 0;}
+        }
+        if(Input.mouseScrollDelta.y < -0.5f){
+            handState -= 1;
+            if(handState<0){handState = 2;}
+        }
+
         //z movement 
         if(Input.GetKey(KeyCode.Mouse0)&&handHeight>0f){
             handHeight -= 0.1f;
