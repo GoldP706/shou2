@@ -25,7 +25,6 @@ public class HandControllerNew : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(closestObj,heldObj);
         //z movement
         if(Input.GetKey(KeyCode.Mouse0)&&handHeight>0f){
             handHeight -= 0.1f;
