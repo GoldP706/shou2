@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 20cc923a72e744ba5a178a5849ea3e78
+guid: 0510273f0df4b4592b0fdc7af4b85662
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -111,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: caba1a92779904212a1a1ac2d4c3a341
-      internalID: 1180488772
+      spriteID: 18414a7cdc5454782bfd62daadfecab4
+      internalID: -272985584
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      side4th2_0: 1180488772
+      side4th2_0: -272985584
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

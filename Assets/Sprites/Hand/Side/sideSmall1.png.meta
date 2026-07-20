@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sideSmall2_0
+      name: sideSmall1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3382b45a678ea4839b66fd771cfb6758
-      internalID: -469101563
+      spriteID: 75b6d4603a84a44b487072388e35a609
+      internalID: 1012454612
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      sideSmall2_0: -469101563
+      sideSmall1_0: 1012454612
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

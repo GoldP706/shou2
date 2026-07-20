@@ -661,11 +661,11 @@ PrefabInstance:
     - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 
-      objectReference: {fileID: 1180488772, guid: 20cc923a72e744ba5a178a5849ea3e78, type: 3}
+      objectReference: {fileID: -272985584, guid: 0510273f0df4b4592b0fdc7af4b85662, type: 3}
     - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideOpen
       value: 
-      objectReference: {fileID: -834215161, guid: 2c676217825ad425c81a3265874925cb, type: 3}
+      objectReference: {fileID: -1145588213, guid: 2c676217825ad425c81a3265874925cb, type: 3}
     - target: {fileID: 3885342494018581174, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: handController
       value: 
@@ -677,11 +677,11 @@ PrefabInstance:
     - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 
-      objectReference: {fileID: 1807466543, guid: e7e3366e9da0e45a992ade9a6c4914c0, type: 3}
+      objectReference: {fileID: 21300000, guid: 8519d22587cd344c2965abd72df3c842, type: 3}
     - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideOpen
       value: 
-      objectReference: {fileID: -469101563, guid: e32f63d31830f450dbab0769811e0629, type: 3}
+      objectReference: {fileID: 1012454612, guid: e32f63d31830f450dbab0769811e0629, type: 3}
     - target: {fileID: 4552984985392583103, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: handController
       value: 

@@ -25,7 +25,7 @@ public class PalmSpriteController : MonoBehaviour
         else if(handController.handState == 1)//side state
         {
             spr.sprite = side;
-            spr.sortingOrder = 0;
+            spr.sortingOrder = 50;
 
         }
     }
