@@ -25,7 +25,8 @@ public class HandControllerNew : MonoBehaviour
 
     void Update()
     {
-        //z movement
+        Debug.Log(grabbing);
+        //z movement 
         if(Input.GetKey(KeyCode.Mouse0)&&handHeight>0f){
             handHeight -= 0.1f;
         }
@@ -35,28 +36,30 @@ public class HandControllerNew : MonoBehaviour
         }
 
         //grab and move
-        if(thumb.isGrabbing && closestObj != null)
+        if(thumb.isGrabbing)
         {
             if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
             {
                 grabbing = true;
-                closestObj.GetComponent<TargetJoint2D>().target = transform.position;
-                if(heldObj != null)
-                {
-                    heldObj = closestObj;
-                }
-                else{
-                    grabbing = false;
-                    heldObj = null;
-                }
             }
+            else{grabbing = false;}
         }
+        else{grabbing = false;}
+        
+        if(closestObj != null && grabbing)
+        {
+            heldObj = closestObj;
+            heldObj.GetComponent<TargetJoint2D>().target = transform.position;
+        }
+        else{
+            heldObj = null;
+        }  
 
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.tag == "CanGrab" && closestObj == null)
+        if(other.gameObject.tag == "CanGrab" && closestObj == null && grabbing == false)
         {
             closestObj = other.gameObject;
         }

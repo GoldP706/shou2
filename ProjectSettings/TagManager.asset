@@ -40,6 +40,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Shadow
+    uniqueID: 2048055415
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Hand
+    uniqueID: 842945215
     locked: 0
