@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LiquidMat
-  m_Shader: {fileID: 4800000, guid: ba09f5632c32a1e4da91791372d76675, type: 3}
+  m_Name: liquid mat
+  m_Shader: {fileID: 4800000, guid: 797dc04ff8b4107408ead451f9947678, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 535a11c19a7b7467d9fe235bd60e03ee, type: 3}
+        m_Texture: {fileID: 2800000, guid: bdf0846654d18374a90cde8ecf5d3cb3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
