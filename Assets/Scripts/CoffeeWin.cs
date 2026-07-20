@@ -5,6 +5,8 @@ using UnityEngine;
 public class CoffeeWin : MonoBehaviour
 {
     private AudioSource audioSource;
+    [SerializeField]CoffeeCupBehavior coffeeCupBehavior;
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -17,7 +19,7 @@ public class CoffeeWin : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.name == ("CoffeeCup"))
+        if (other.gameObject.name == ("CoffeeCup")&&!coffeeCupBehavior.spilled)
         {
             audioSource.Play();
             Debug.Log("Coffee drank Dark Souls text");

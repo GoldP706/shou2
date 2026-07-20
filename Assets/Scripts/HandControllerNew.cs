@@ -29,11 +29,11 @@ public class HandControllerNew : MonoBehaviour
     void Update()
     {
         //switch hand state
-        if(Input.mouseScrollDelta.y > 0.5f){
+        if(Input.mouseScrollDelta.y > 0.9f){
             handState += 1;
             if(handState>2){handState = 0;}
         }
-        if(Input.mouseScrollDelta.y < -0.5f){
+        if(Input.mouseScrollDelta.y < -0.9f){
             handState -= 1;
             if(handState<0){handState = 2;}
         }
