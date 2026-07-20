@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoffeeController : MonoBehaviour
+public class CoffeeCupBehavior : MonoBehaviour
 {
     public GameObject hand;
     private HandControllerNew handController;
@@ -14,6 +14,12 @@ public class CoffeeController : MonoBehaviour
 
     void Update()
     {
-        
+        Debug.Log("Hand state: " + handController.handState);
+        if(handController.handState == 1){
+            gameObject.tag = "CanGrab";
+        }
+        else{
+            gameObject.tag = "Untagged";
+        }
     }
 }
