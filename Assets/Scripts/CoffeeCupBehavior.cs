@@ -6,10 +6,12 @@ public class CoffeeCupBehavior : MonoBehaviour
 {
     public GameObject hand;
     private HandControllerNew handController;
+    private Transform tr;
 
     void Start()
     {
         handController = hand.GetComponent<HandControllerNew>();
+        tr = GetComponent<Transform>();
     }
 
     void Update()
