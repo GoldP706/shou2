@@ -22,11 +22,16 @@ public class ComputerTask : MonoBehaviour
     public int minStep = 3;
     public int maxStep = 5;
 
+    [Header("总任务次数")]
+    public int totalTaskCount = 3;
+
     [Header("Cooldown")]
     public float cooldown = 8f;
 
     private int currentStep;
     private int targetStep;
+
+    private int finishedTaskCount = 0;
 
     private bool taskRunning = false;
 
@@ -133,6 +138,16 @@ public class ComputerTask : MonoBehaviour
         taskRunning = false;
 
         keyPointer.gameObject.SetActive(false);
+
+        finishedTaskCount++;
+
+        Debug.Log("已完成电脑任务 " + finishedTaskCount + " / " + totalTaskCount);
+
+        if (finishedTaskCount >= totalTaskCount)
+        {
+            Debug.Log("电脑任务全部完成，不再继续");
+            return;
+        }
 
         StartCoroutine(Cooldown());
     }
