@@ -7,7 +7,6 @@ TagManager:
   - border
   - CanGrab
   - catchCollider
-  - fly
   layers:
   - Default
   - TransparentFX
