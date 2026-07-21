@@ -384,6 +384,7 @@ MonoBehaviour:
   hand: {fileID: 2045379958}
   coffee: {fileID: 765474103}
   spilled: 0
+  killTimer: 3
 --- !u!257 &401807385
 TargetJoint2D:
   m_ObjectHideFlags: 0
@@ -1018,6 +1019,7 @@ MonoBehaviour:
   handController: {fileID: 2045379959}
   flat: {fileID: 8353384060517103977, guid: eb39dcdc31fcd4fc3b32c79fcb2550bd, type: 3}
   side: {fileID: 1142130839, guid: 311119b4259cc4cd1b07546da6f811e1, type: 3}
+  type: {fileID: -885510112, guid: fa977340873a94e79896a3c683306148, type: 3}
 --- !u!1001 &886381900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1046,6 +1048,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 61fdcb869ed504a61a2b4bbf42471ad4, type: 2}
+    - target: {fileID: 3250723882063843311, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: type1
+      value: 
+      objectReference: {fileID: -760657725, guid: 3328496d2af4e49ac8d9062e6f3f115c, type: 3}
+    - target: {fileID: 3250723882063843311, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: type2
+      value: 
+      objectReference: {fileID: -760657725, guid: 3328496d2af4e49ac8d9062e6f3f115c, type: 3}
     - target: {fileID: 3250723882063843311, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 
@@ -1138,6 +1148,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 18.211
       objectReference: {fileID: 0}
+    - target: {fileID: 6976773891224213110, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: type1
+      value: 
+      objectReference: {fileID: -469237220, guid: d27d466aca26f4539906fe48f9014428, type: 3}
+    - target: {fileID: 6976773891224213110, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+      propertyPath: type2
+      value: 
+      objectReference: {fileID: -98198730, guid: c439203f354ea4a879fc67bc72ef1eb0, type: 3}
     - target: {fileID: 6976773891224213110, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
       propertyPath: sideGrab
       value: 

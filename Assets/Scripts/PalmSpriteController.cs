@@ -7,6 +7,7 @@ public class PalmSpriteController : MonoBehaviour
     [SerializeField]HandControllerNew handController;
     public Sprite flat;
     public Sprite side;
+    public Sprite type;
 
     private SpriteRenderer spr;
 
@@ -26,7 +27,11 @@ public class PalmSpriteController : MonoBehaviour
         {
             spr.sprite = side;
             spr.sortingOrder = 50;
-
+        }
+        else if(handController.handState == 2)//type state
+        {
+            spr.sprite = type;
+            spr.sortingOrder = 50;
         }
     }
 }

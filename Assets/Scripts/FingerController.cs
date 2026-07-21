@@ -10,6 +10,8 @@ public class FingerController : MonoBehaviour
     public Sprite open;
     public Sprite sideGrab;
     public Sprite sideOpen;
+    public Sprite type1;
+    public Sprite type2;
 
     public Sprite openSprite;
     public Sprite grabSprite;
@@ -38,10 +40,15 @@ public class FingerController : MonoBehaviour
             openSprite = open;
             grabSprite = grab;
         }
-        else //if(handController.handState == 1)//side state
+        else if(handController.handState == 1)//side state
         {
             openSprite = sideOpen;
             grabSprite = sideGrab;
+        }
+        else if(handController.handState == 2)//type state
+        {
+            openSprite = type1;
+            grabSprite = type2;
         }
 
         if(Input.GetKey(KeyCode.RightShift))
