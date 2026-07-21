@@ -16,6 +16,7 @@ public class FlySting : MonoBehaviour
     void Start()
     {
         stingWaitTimer = stingWaitTimerMax;
+        flyMovement = GameObject.Find("FlyPrefab").GetComponent<FlyMovement>();
     }
 
     void Update()
