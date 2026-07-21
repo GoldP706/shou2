@@ -38,7 +38,12 @@ public class FlyMovement : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(isDead);
         RandomDrift();
+        if(isDead){
+            driftSpeed = 0;
+            rb.gravityScale = 3;
+        }
     }
 
     void RandomDrift()
@@ -112,9 +117,9 @@ public class FlyMovement : MonoBehaviour
     void OnTriggerStay2D(Collider2D other){
         if (other.CompareTag("catchCollider") && handController.handState == 0){
             if(Input.GetKey(KeyCode.Space)){
-                if(Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)){
+                if(Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)){                    isDead = true;
                     isDead = true;
-                    rb.gravityScale = 1;
+                    //Destroy(gameObject);
                 }
             }
         }
