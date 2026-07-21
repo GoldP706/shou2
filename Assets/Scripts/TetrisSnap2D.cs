@@ -2,23 +2,24 @@ using UnityEngine;
 
 public class TetrisSnap2D : MonoBehaviour
 {
-    [Header("Fixed target (recommended for this puzzle)")]
-    [Tooltip("If assigned, the piece snaps directly to this exact position instead of using the grid calculation.")]
+    [Header("Fixed target")]
+    [Tooltip("The exact final position of this piece.")]
     public Transform fixedTarget;
 
-    [Tooltip("Hold the piece perfectly in place after snapping. It will automatically unlock when grabbed again.")]
+    [Tooltip("Keep the piece perfectly aligned after snapping. It can still be grabbed again until the whole puzzle is complete.")]
     public bool lockAfterFixedSnap = true;
 
-    [Header("4 x 5 board")]
-    [Tooltip("Place an empty object at the inside bottom-left corner of the wooden frame.")]
-    public Transform gridOrigin;
+    [Tooltip("Temporarily disable non-trigger colliders while held, so irregular pieces do not push nearby pieces.")]
+    public bool ignoreSolidCollisionsWhileHeld = false;
 
+    [Header("4 x 5 grid fallback")]
+    public Transform gridOrigin;
     [Min(0.01f)] public float cellSize = 1f;
     [Min(1)] public int columns = 4;
     [Min(1)] public int rows = 5;
 
     [Header("Snapping")]
-    [Tooltip("The piece only snaps when it is this close to the board.")]
+    [Tooltip("Maximum world-space distance from the target at release.")]
     [Min(0f)] public float snapRange = 1.5f;
 
     private Rigidbody2D body;
@@ -27,7 +28,10 @@ public class TetrisSnap2D : MonoBehaviour
     private TargetJoint2D targetJoint;
     private RigidbodyType2D originalBodyType;
     private RigidbodyConstraints2D originalConstraints;
-    private bool isFixedSnapped;
+    [SerializeField] private bool isFixedSnapped;
+    [SerializeField] private bool permanentlyLocked;
+
+    public bool IsFixedSnapped => isFixedSnapped;
 
     private void Awake()
     {
@@ -45,33 +49,50 @@ public class TetrisSnap2D : MonoBehaviour
 
     public void BeginGrab()
     {
-        if (!isFixedSnapped || body == null)
+        if (body == null || permanentlyLocked)
         {
             return;
         }
 
-        body.bodyType = originalBodyType;
-        body.constraints = originalConstraints;
-        body.velocity = Vector2.zero;
-        body.angularVelocity = 0f;
-
-        if (targetJoint != null)
+        if (isFixedSnapped)
         {
-            targetJoint.enabled = true;
-            targetJoint.target = body.position;
+            body.bodyType = originalBodyType;
+            body.constraints = originalConstraints;
+            body.velocity = Vector2.zero;
+            body.angularVelocity = 0f;
+
+            if (targetJoint != null)
+            {
+                targetJoint.enabled = true;
+                targetJoint.target = body.position;
+            }
+
+            body.WakeUp();
+            isFixedSnapped = false;
         }
 
-        body.WakeUp();
-        isFixedSnapped = false;
+        if (ignoreSolidCollisionsWhileHeld)
+        {
+            SetSolidCollidersEnabled(false);
+        }
     }
 
     public void TrySnapToGrid()
     {
+        if (permanentlyLocked)
+        {
+            return;
+        }
+
         if (fixedTarget != null)
         {
             TrySnapToFixedTarget();
+            SetSolidCollidersEnabled(true);
+            Physics2D.SyncTransforms();
             return;
         }
+
+        SetSolidCollidersEnabled(true);
 
         if (gridOrigin == null || body == null || spriteRenderer == null)
         {
@@ -82,8 +103,10 @@ public class TetrisSnap2D : MonoBehaviour
         Vector2 origin = gridOrigin.position;
         Vector2 oldPosition = body.position;
 
-        int pieceColumns = Mathf.Max(1, Mathf.RoundToInt(bounds.size.x / cellSize));
-        int pieceRows = Mathf.Max(1, Mathf.RoundToInt(bounds.size.y / cellSize));
+        int pieceColumns = Mathf.Max(1,
+            Mathf.RoundToInt(bounds.size.x / cellSize));
+        int pieceRows = Mathf.Max(1,
+            Mathf.RoundToInt(bounds.size.y / cellSize));
 
         if (pieceColumns > columns || pieceRows > rows)
         {
@@ -142,6 +165,7 @@ public class TetrisSnap2D : MonoBehaviour
         Vector2 targetPosition = fixedTarget.position;
         if (Vector2.Distance(body.position, targetPosition) > snapRange)
         {
+            isFixedSnapped = false;
             return;
         }
 
@@ -150,7 +174,6 @@ public class TetrisSnap2D : MonoBehaviour
         body.velocity = Vector2.zero;
         body.angularVelocity = 0f;
         UpdateJointTarget(targetPosition);
-        Physics2D.SyncTransforms();
 
         if (!lockAfterFixedSnap)
         {
@@ -165,6 +188,44 @@ public class TetrisSnap2D : MonoBehaviour
         {
             targetJoint.enabled = false;
         }
+    }
+
+    public void PermanentlyLock()
+    {
+        if (body == null)
+        {
+            return;
+        }
+
+        permanentlyLocked = true;
+        isFixedSnapped = true;
+
+        if (fixedTarget != null)
+        {
+            body.position = fixedTarget.position;
+            body.rotation = fixedTarget.eulerAngles.z;
+        }
+
+        SetSolidCollidersEnabled(true);
+        body.velocity = Vector2.zero;
+        body.angularVelocity = 0f;
+        body.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        if (targetJoint != null)
+        {
+            targetJoint.enabled = false;
+        }
+
+        foreach (Collider2D pieceCollider in pieceColliders)
+        {
+            if (pieceCollider != null && pieceCollider.isTrigger)
+            {
+                pieceCollider.enabled = false;
+            }
+        }
+
+        gameObject.tag = "Untagged";
+        Physics2D.SyncTransforms();
     }
 
     private bool OverlapsAnotherPiece()
@@ -183,14 +244,16 @@ public class TetrisSnap2D : MonoBehaviour
 
             foreach (Collider2D ownCollider in pieceColliders)
             {
-                if (ownCollider == null || ownCollider.isTrigger)
+                if (ownCollider == null || ownCollider.isTrigger ||
+                    !ownCollider.enabled)
                 {
                     continue;
                 }
 
                 foreach (Collider2D otherCollider in otherColliders)
                 {
-                    if (otherCollider == null || otherCollider.isTrigger)
+                    if (otherCollider == null || otherCollider.isTrigger ||
+                        !otherCollider.enabled)
                     {
                         continue;
                     }
@@ -211,6 +274,17 @@ public class TetrisSnap2D : MonoBehaviour
         if (targetJoint != null)
         {
             targetJoint.target = position;
+        }
+    }
+
+    private void SetSolidCollidersEnabled(bool enabled)
+    {
+        foreach (Collider2D pieceCollider in pieceColliders)
+        {
+            if (pieceCollider != null && !pieceCollider.isTrigger)
+            {
+                pieceCollider.enabled = enabled;
+            }
         }
     }
 }
