@@ -33,7 +33,7 @@ public class CoffeeCupBehavior : MonoBehaviour
 
         if(tr.rotation.eulerAngles.z > 90f || tr.rotation.eulerAngles.z < -90f){
             coffeeSpr.enabled = false;
-            spilled = true;
+            //spilled = true;
         }
         if(spilled){
             if(!sfxPlayed){

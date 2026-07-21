@@ -1004,7 +1004,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 535a11c19a7b7467d9fe235bd60e03ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1037,9 +1037,9 @@ MonoBehaviour:
   flat: {fileID: 8353384060517103977, guid: eb39dcdc31fcd4fc3b32c79fcb2550bd, type: 3}
   side: {fileID: 1142130839, guid: 311119b4259cc4cd1b07546da6f811e1, type: 3}
   type: {fileID: -885510112, guid: fa977340873a94e79896a3c683306148, type: 3}
-  flatElbow: {fileID: 0}
-  sideElbow: {fileID: 0}
-  typeElbow: {fileID: 0}
+  flatElbow: {fileID: 2054104487, guid: 0439253e01aa641c4a961545631d5f93, type: 3}
+  sideElbow: {fileID: 114640157, guid: 668a198aaa8944741a2948c4caa00831, type: 3}
+  typeElbow: {fileID: 1808541179, guid: fcfa3683006c54db18fa37f6ca8a22f1, type: 3}
 --- !u!1001 &886381900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1807,7 +1807,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ba40d4c813bec494b8f6200ecc91cdf6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2610,12 +2610,12 @@ SceneRoots:
   - {fileID: 1118606177}
   - {fileID: 1518658915}
   - {fileID: 495522105}
+  - {fileID: 728882562}
   - {fileID: 7871418953201069569}
   - {fileID: 1620002313}
   - {fileID: 312750295}
   - {fileID: 1918398646}
   - {fileID: 1969898747}
   - {fileID: 401807381}
-  - {fileID: 728882562}
   - {fileID: 1278840105}
   - {fileID: 1290569449}
