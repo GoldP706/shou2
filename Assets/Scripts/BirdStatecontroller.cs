@@ -48,6 +48,11 @@ public class BirdStateController : MonoBehaviour
     [Tooltip("残影脚本引用")]
     public AfterImageEffect afterImage;
 
+    // ✅ 新增：任务状态标记，默认false，安抚成功后永久为true
+    [Header("任务状态")]
+    [Tooltip("玩家是否成功通过抚摸安抚过鸟（任务完成标记）")]
+    public bool hasCalmedBird = false;
+
     // 状态
     public BirdState currentState { get; private set; }
     private Vector3 startPosition;
@@ -205,6 +210,8 @@ public class BirdStateController : MonoBehaviour
 
                 if (petCount >= requiredPets)
                 {
+                    // ✅ 抚摸成功，标记任务完成（仅加了这一行，其他逻辑不动）
+                    hasCalmedBird = true;
                     EnterIdle();
                     return;
                 }
@@ -283,7 +290,7 @@ public class BirdStateController : MonoBehaviour
                     if (stateInfo.normalizedTime >= 0.9f && stateInfo.IsName("BirdPeck"))
                     {
                         tempAnim.Play("BirdPeck", 0, 0);
-                        // ✅ 双重限制：不超过数组长度，不超过3层上限
+                        // 双重限制：不超过数组长度，不超过3层上限
                         if (crackLayers != null && currentCrackIndex < crackLayers.Length && currentCrackIndex < MAX_CRACK_LAYERS)
                         {
                             if (crackLayers[currentCrackIndex] != null)
