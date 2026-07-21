@@ -31,7 +31,7 @@ public class CoffeeCupBehavior : MonoBehaviour
             gameObject.tag = "Untagged";
         }
 
-        if(tr.rotation.eulerAngles.z > 90f || tr.rotation.eulerAngles.z < -90f){
+        if(tr.rotation.z > 90f || tr.rotation.z < -90f){
             coffeeSpr.enabled = false;
             spilled = true;
         }

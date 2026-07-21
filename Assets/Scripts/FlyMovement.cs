@@ -22,11 +22,18 @@ public class FlyMovement : MonoBehaviour
 
     //check if dead
     public bool isDead = false;
+    private GameObject hand;
+    [SerializeField] HandControllerNew handController;
+
+    private Rigidbody2D rb;
 
     void Start()
     {
         PickNewDriftDirection();
         driftDirection = targetDriftDirection;
+        hand = GameObject.Find("HandPrefab");
+        handController = hand.GetComponent<HandControllerNew>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -99,6 +106,17 @@ public class FlyMovement : MonoBehaviour
         if (other.CompareTag("border"))
         {
             returningToScreen = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other){
+        if (other.CompareTag("catchCollider") && handController.handState == 0){
+            if(Input.GetKey(KeyCode.Space)){
+                if(Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)){
+                    isDead = true;
+                    rb.gravityScale = 1;
+                }
+            }
         }
     }
 }
