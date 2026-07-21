@@ -12,6 +12,8 @@ public class HandControllerNew : MonoBehaviour
     private bool sfxPlayed = false;
 
     public int handState = 0; //0 = flat, 1 = side, 2 = type
+    private bool stateSwitched = false;
+
 
     [SerializeField]FingerController thumb;
     [SerializeField]FingerController pointer;
@@ -29,13 +31,18 @@ public class HandControllerNew : MonoBehaviour
     void Update()
     {
         //switch hand state
-        if(Input.mouseScrollDelta.y > 0.9f){
+        if(Input.mouseScrollDelta.y > 0.5f && !stateSwitched){
             handState += 1;
             if(handState>2){handState = 0;}
+            stateSwitched = true;
         }
-        if(Input.mouseScrollDelta.y < -0.9f){
+        if(Input.mouseScrollDelta.y < -0.5f && !stateSwitched){
             handState -= 1;
             if(handState<0){handState = 2;}
+            stateSwitched = true;
+        }
+        if(Input.mouseScrollDelta.y == 0f){
+            stateSwitched = false;
         }
 
         //z movement 
