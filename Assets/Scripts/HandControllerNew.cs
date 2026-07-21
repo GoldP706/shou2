@@ -193,7 +193,8 @@ public class HandControllerNew : MonoBehaviour
 
         foreach (KeyValuePair<GameObject, int> pair in nearbyObjects)
         {
-            if (pair.Key == null || pair.Value <= 0)
+            if (pair.Key == null || pair.Value <= 0 ||
+                !pair.Key.CompareTag("CanGrab"))
             {
                 continue;
             }
@@ -212,4 +213,5 @@ public class HandControllerNew : MonoBehaviour
         return nearest;
     }
 }
+
 

@@ -114,6 +114,7 @@ public class FlyMovement : MonoBehaviour
         }
     }
 
+//catch fly
     void OnTriggerStay2D(Collider2D other){
         if (other.CompareTag("catchCollider") && handController.handState == 0){
             if(Input.GetKey(KeyCode.Space)){
@@ -122,6 +123,10 @@ public class FlyMovement : MonoBehaviour
                     //Destroy(gameObject);
                 }
             }
+        }
+        if (other.CompareTag("border"))
+        {
+            returningToScreen = true;
         }
     }
 }

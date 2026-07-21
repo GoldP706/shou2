@@ -125,6 +125,8 @@ MonoBehaviour:
   directionChangeTime: 1.5
   driftSmoothness: 3
   safeDistance: 3
+  isDead: 0
+  handController: {fileID: 0}
 --- !u!61 &7012944559749021554
 BoxCollider2D:
   m_ObjectHideFlags: 0
