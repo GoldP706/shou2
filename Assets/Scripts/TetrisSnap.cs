@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class TetrisSnap2D : MonoBehaviour
@@ -215,4 +214,3 @@ public class TetrisSnap2D : MonoBehaviour
         }
     }
 }
-
