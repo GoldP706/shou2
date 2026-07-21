@@ -20,6 +20,9 @@ public class FlyMovement : MonoBehaviour
     // �Ƿ����ڷ�����Ļ
     private bool returningToScreen = false;
 
+    //check if dead
+    public bool isDead = false;
+
     void Start()
     {
         PickNewDriftDirection();
@@ -99,7 +102,13 @@ public class FlyMovement : MonoBehaviour
         }
         if(other.CompareTag("catchCollider") && handController.handState == 0)
         {
-            returningToScreen = true;
+            if(thumb.isGrabbing)
+            {   
+                if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
+                {
+                    is dead = true;
+                }
+            }
         }
     }
 }
