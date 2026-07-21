@@ -24,7 +24,7 @@ public class CoffeeCupBehavior : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Hand state: " + handController.handState);
+        //Debug.Log("Hand state: " + handController.handState);
         if(handController.handState == 1){
             gameObject.tag = "CanGrab";
         }
