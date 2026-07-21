@@ -18,6 +18,7 @@ public class KillCollider : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other){
+        Debug.Log("triggered");
         Destroy(other.gameObject);
         if(other.gameObject.name == "CoffeeCup"){
             audioSource.Play();
