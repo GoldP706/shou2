@@ -16,5 +16,6 @@ public class CactusHazard2D : MonoBehaviour
         {
             hand.BounceFrom(transform.position);
         }
+
     }
 }
