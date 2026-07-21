@@ -102,7 +102,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1920
+        width: 1918
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -121,9 +121,9 @@ TextureImporter:
       name: birdPeck_1
       rect:
         serializedVersion: 2
-        x: 1920
+        x: 1918
         y: 0
-        width: 1920
+        width: 1918
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -142,9 +142,9 @@ TextureImporter:
       name: birdPeck_2
       rect:
         serializedVersion: 2
-        x: 3840
+        x: 3836
         y: 0
-        width: 1920
+        width: 1918
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
