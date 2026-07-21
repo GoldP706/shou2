@@ -22,7 +22,7 @@ public class BirdStateController : MonoBehaviour
 
     [Header("抚摸参数")]
     [Tooltip("安抚成功需要的抚摸次数")]
-    public int requiredPets = 10;
+    public int requiredPets;
 
     [Header("原鸟愤怒移动参数")]
     [Tooltip("原鸟移出屏幕的速度")]
@@ -112,6 +112,8 @@ public class BirdStateController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(petCount);
+
         switch (currentState)
         {
             case BirdState.Idle:
@@ -195,16 +197,11 @@ public class BirdStateController : MonoBehaviour
     // 检测抚摸（手指弯曲上升沿）
     void OnTriggerStay2D(Collider2D other)
     {
-        if (currentState != BirdState.Screaming) return;
+        Debug.Log("bird");
+        if (currentState != BirdState.Screaming) {return;}
 
-        FingerController finger = other.GetComponent<FingerController>();
-        if (finger != null)
+        if (Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)||Input.GetKeyDown(KeyCode.Space))
         {
-            bool prevGrab = fingerPrevState.ContainsKey(finger) ? fingerPrevState[finger] : false;
-            bool currentGrab = finger.isGrabbing;
-
-            if (!prevGrab && currentGrab)
-            {
                 petCount++;
                 Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
 
@@ -215,10 +212,9 @@ public class BirdStateController : MonoBehaviour
                     EnterIdle();
                     return;
                 }
-            }
-
-            fingerPrevState[finger] = currentGrab;
         }
+
+        //fingerPrevState[finger] = currentGrab;
     }
 
     void OnTriggerExit2D(Collider2D other)

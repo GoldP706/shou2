@@ -72,11 +72,10 @@ public class ComputerTask : MonoBehaviour
 
     void TryClick()
     {
-        Debug.Log("11");
         // ֻ�� Type ���Ʋ��ܴ���
         if (hand.handState != 2)
         {
-            Debug.Log("���� Type ����");
+            //Debug.Log("���� Type ����");
             return;
         }
 
@@ -89,12 +88,8 @@ public class ComputerTask : MonoBehaviour
 
         if (distance <= clickDistance)
         {
-            Debug.Log("����ɹ���");
+            //Debug.Log("����ɹ���");
             CorrectClick();
-        }
-        else
-        {
-            Debug.Log("������");
         }
     }
 
@@ -102,7 +97,7 @@ public class ComputerTask : MonoBehaviour
     {
         currentStep++;
 
-        Debug.Log("Correct : " + currentStep + "/" + targetStep);
+        //Debug.Log("Correct : " + currentStep + "/" + targetStep);
 
         if (currentStep >= targetStep)
         {
@@ -129,12 +124,12 @@ public class ComputerTask : MonoBehaviour
         // ���ñ�Ե���״̬����������һ��ʼ����Ϊ����԰�ס��һ�ζ������󴥷�
         wasGrabbingLastFrame = pointerFinger.isGrabbing;
 
-        Debug.Log("Computer Task Start, ������Ҫ��� " + targetStep + " ��");
+        //Debug.Log("Computer Task Start, ������Ҫ��� " + targetStep + " ��");
     }
 
     void FinishTask()
     {
-        Debug.Log("Computer Task Finish");
+        //Debug.Log("Computer Task Finish");
 
         taskRunning = false;
 
@@ -142,12 +137,12 @@ public class ComputerTask : MonoBehaviour
 
         finishedTaskCount++;
 
-        Debug.Log("����ɵ������� " + finishedTaskCount + " / " + totalTaskCount);
+        //Debug.Log("����ɵ������� " + finishedTaskCount + " / " + totalTaskCount);
 
         if (finishedTaskCount >= totalTaskCount)
         {
             taskCompleted = true;
-            Debug.Log("��������ȫ����ɣ����ټ���");
+            //Debug.Log("��������ȫ����ɣ����ټ���");
             return;
         }
 
