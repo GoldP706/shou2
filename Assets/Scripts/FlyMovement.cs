@@ -100,15 +100,5 @@ public class FlyMovement : MonoBehaviour
         {
             returningToScreen = true;
         }
-        if(other.CompareTag("catchCollider") && handController.handState == 0)
-        {
-            if(thumb.isGrabbing)
-            {   
-                if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
-                {
-                    isdead = true;
-                }
-            }
-        }
     }
 }

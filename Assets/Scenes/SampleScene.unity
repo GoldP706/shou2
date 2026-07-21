@@ -1826,6 +1826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RetroMario
       objectReference: {fileID: 0}
+    - target: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5311016557059233491, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Size.x
       value: 3.2318697
