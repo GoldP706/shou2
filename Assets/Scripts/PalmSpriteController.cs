@@ -13,7 +13,6 @@ public class PalmSpriteController : MonoBehaviour
     public Sprite typeElbow;
 
     private SpriteRenderer spr;
-    private bool elbowing = false;
 
     void Start()
     {
@@ -24,40 +23,22 @@ public class PalmSpriteController : MonoBehaviour
     {
         if(handController.handState == 0)//flat state
         {
-            if(!elbowing){
-                spr.sprite = flat;
-            }
-            else{
-                spr.sprite = flatElbow;
-            }
+            spr.sprite = flat;
             spr.sortingOrder = 54;
         }
         else if(handController.handState == 1)//side state
         {
-            if(!elbowing){
-                spr.sprite = side;
-            }
-            else{
-                spr.sprite = sideElbow;
-            }
+            spr.sprite = side;
             spr.sortingOrder = 50;
         }
         else if(handController.handState == 2)//type state
         {
-            if(!elbowing){
-                spr.sprite = type;
-            }
-            else{
-                spr.sprite = typeElbow;
-            }
+            spr.sprite = type;
             spr.sortingOrder = 50;
         }
 
-        if(Input.GetKeyDown(KeyCode.Mouse1)){
-            elbowing = true;
-        }
-        if(Input.GetKeyUp(KeyCode.Mouse1)){
-            elbowing = false;
+        if(Input.GetKey(KeyCode.Mouse0)){
+            //elbow
         }
     }
 }
