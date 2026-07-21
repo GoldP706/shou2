@@ -94,6 +94,9 @@ public class BirdStateController : MonoBehaviour
         spr.color = Color.white;
         petCount = 0;
 
+        // 【修改点1】回到待机自动隐藏屏幕裂痕
+        if (crackScreen != null) crackScreen.SetActive(false);
+
         // 启用物理和碰撞
         rb.bodyType = RigidbodyType2D.Dynamic;
         col.enabled = true;
@@ -121,7 +124,8 @@ public class BirdStateController : MonoBehaviour
         stateTimer = screamDuration;
         petCount = 0;
         fingerPrevState.Clear();
-        anim.Play("BirdScreaming"); // 请在Animator里创建同名状态
+        // 【修改点2】和你合并后的动画名统一，删除了BirdScreaming状态的引用
+        anim.Play("BirdAngry");
     }
 
     void UpdateScreaming()
@@ -181,7 +185,7 @@ public class BirdStateController : MonoBehaviour
         yield return StartCoroutine(FlashRedAndShrink());
 
         // 2. 锁定当前帧Sprite（停在愤怒第一帧）
-        anim.Play("BirdAngry", 0, 0); // 请在Animator里创建同名状态
+        anim.Play("BirdAngry", 0, 0);
         anim.speed = 0; // 冻结动画
 
         // 3. 随机方向移出屏幕
@@ -205,16 +209,19 @@ public class BirdStateController : MonoBehaviour
         // 4. 延迟3秒
         yield return new WaitForSeconds(peckDelay);
 
+        // 【调试用】运行到这里Console会打印，没打印就是前面飞的环节卡了
+        Debug.Log("=== 开始播放啄屏幕动画 ===");
+
         // 5. 播放敲击屏幕动画 + 裂痕
-        anim.Play("BirdPeck"); // 请在Animator里创建同名状态
+        anim.Play("BirdPeck");
         anim.speed = 1;
 
         if (crackScreen != null)
         {
             crackScreen.SetActive(true);
-            // 如果裂痕是Animator控制的动图，播放一下
+            // 【修改点3】裂痕动画每次从头播放，和啄屏幕同步
             Animator crackAnim = crackScreen.GetComponent<Animator>();
-            if (crackAnim != null) crackAnim.Play(0);
+            if (crackAnim != null) crackAnim.Play("CrackAppear", 0, 0);
         }
 
         // 等待敲击动画播完（假设动画时长约1.5秒，可调整）

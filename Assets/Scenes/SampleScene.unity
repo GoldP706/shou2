@@ -139,17 +139,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf39b327adf88044b57b129644eba28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minIdleTime: 5
+  minIdleTime: 10
   maxIdleTime: 15
-  screamDuration: 10
+  screamDuration: 2
   peckDelay: 3
-  requiredPets: 10
+  requiredPets: 2
   angryMoveSpeed: 15
-  flashDuration: 0.8
-  angryScale: 0.7
+  flashDuration: 0.5
+  angryScale: 0.5
   crackScreen: {fileID: 0}
-  afterImage: {fileID: 0}
---- !u!114 &279697366
+  afterImage: {fileID: 279697375}
+--- !u!114 &279697375
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -900,6 +900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 751909935}
   - component: {fileID: 751909934}
+  - component: {fileID: 751909936}
   m_Layer: 0
   m_Name: Keyboard
   m_TagString: Untagged
@@ -974,6 +975,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &751909936
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751909933}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &765474103
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,10 +2541,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       insertIndex: 5
-      addedObject: {fileID: 279697366}
+      addedObject: {fileID: 279697365}
     - targetCorrespondingSourceObject: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       insertIndex: 6
-      addedObject: {fileID: 279697365}
+      addedObject: {fileID: 279697375}
   m_SourcePrefab: {fileID: 100100000, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
 --- !u!1001 &7871418953201069569
 PrefabInstance:

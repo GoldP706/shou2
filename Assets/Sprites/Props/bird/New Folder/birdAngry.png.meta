@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c20c50ffc938a4fa7b3c02142f580a4b
+guid: 046f812122acc4ae28820d3dd6ecc4f7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: birdPeck_0
+      name: birdAngry_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1920
-        height: 1080
+        width: 251
+        height: 252
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cc0aadd17e184bdca44bec562e63374
-      internalID: 1594292938
+      spriteID: 1f5dab73525e5a44ea9e0ec5abe677ed
+      internalID: -1033785436
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: birdPeck_1
+      name: birdAngry_1
       rect:
         serializedVersion: 2
-        x: 1920
+        x: 251
         y: 0
-        width: 1920
-        height: 1080
+        width: 251
+        height: 252
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,29 +132,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71a9e11f946444908a3dd4c2ffa705f7
-      internalID: 73091413
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: birdPeck_2
-      rect:
-        serializedVersion: 2
-        x: 3840
-        y: 0
-        width: 1920
-        height: 1080
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8d8c92afe3c64438bbfe465878eefa74
-      internalID: -2135321546
+      spriteID: 7f3010cf08e88374ca2d4626b98e068a
+      internalID: -1165346852
       vertices: []
       indices: 
       edges: []
@@ -170,9 +149,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      birdPeck_0: 1594292938
-      birdPeck_1: 73091413
-      birdPeck_2: -2135321546
+      birdAngry_0: -1033785436
+      birdAngry_1: -1165346852
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
