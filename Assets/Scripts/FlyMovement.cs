@@ -106,7 +106,7 @@ public class FlyMovement : MonoBehaviour
             {   
                 if(pointer.isGrabbing || middle.isGrabbing || ring.isGrabbing || little.isGrabbing)
                 {
-                    is dead = true;
+                    isdead = true;
                 }
             }
         }
