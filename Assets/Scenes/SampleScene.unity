@@ -2488,6 +2488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fly_0
       objectReference: {fileID: 0}
+    - target: {fileID: 7428443584922346659, guid: 285ed616b1c724ea98d45ab7fc98a659, type: 3}
+      propertyPath: handController
+      value: 
+      objectReference: {fileID: 2045379959}
     - target: {fileID: 7571480959178659156, guid: 285ed616b1c724ea98d45ab7fc98a659, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.9616
