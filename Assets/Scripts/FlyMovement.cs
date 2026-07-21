@@ -22,7 +22,8 @@ public class FlyMovement : MonoBehaviour
 
     //check if dead
     public bool isDead = false;
-    [SerializeField]HandControllerNew handController;
+    private GameObject hand;
+    [SerializeField] HandControllerNew handController;
 
     private Rigidbody2D rb;
 
@@ -30,6 +31,8 @@ public class FlyMovement : MonoBehaviour
     {
         PickNewDriftDirection();
         driftDirection = targetDriftDirection;
+        hand = GameObject.Find("HandPrefab");
+        handController = hand.GetComponent<HandControllerNew>();
         //rb = GetComponent<RigidBody2D>();
     }
 
