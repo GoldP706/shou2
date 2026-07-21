@@ -287,6 +287,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 41266280}
   m_CullTransparentMesh: 1
+--- !u!1 &71643642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71643644}
+  - component: {fileID: 71643643}
+  m_Layer: 0
+  m_Name: FlyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &71643643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71643642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abe56e0db20d420594c70515f254598, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stingWaitTimerMax: 15
+  stingingTimeMax: 5
+  canRespawn: 0
+  stingWarningSpr: {fileID: 0}
+  flyMovement: {fileID: 766260282}
+  flyPrefab: {fileID: 6433831483177901624, guid: 285ed616b1c724ea98d45ab7fc98a659, type: 3}
+  currentFly: {fileID: 0}
+--- !u!4 &71643644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71643642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.38063666, y: 0.28996322, z: -0.07264438}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &80499414
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,6 +2691,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &766260282 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7428443584922346659, guid: 285ed616b1c724ea98d45ab7fc98a659, type: 3}
+  m_PrefabInstance: {fileID: 7871418953201069569}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e36a3c2b5fcf4e5eb25b4396d415849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &766469813 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1362896320618218991, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
@@ -5993,3 +6055,4 @@ SceneRoots:
   - {fileID: 1290569449}
   - {fileID: 170034265}
   - {fileID: 1861311211}
+  - {fileID: 71643644}
