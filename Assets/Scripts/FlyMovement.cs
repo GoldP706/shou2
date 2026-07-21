@@ -33,7 +33,7 @@ public class FlyMovement : MonoBehaviour
         driftDirection = targetDriftDirection;
         hand = GameObject.Find("HandPrefab");
         handController = hand.GetComponent<HandControllerNew>();
-        //rb = GetComponent<RigidBody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -114,7 +114,7 @@ public class FlyMovement : MonoBehaviour
             if(Input.GetKey(KeyCode.Space)){
                 if(Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)){
                     isDead = true;
-                    Destroy(gameObject);
+                    rb.gravityScale = 1;
                 }
             }
         }
