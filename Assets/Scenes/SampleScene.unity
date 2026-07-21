@@ -4398,6 +4398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5947703829928099284, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Sprite
       value: 
