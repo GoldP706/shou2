@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 70f7dee5fd0979c4a80298a4b05fa17d
+guid: c20c50ffc938a4fa7b3c02142f580a4b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bird2_0
+      name: birdPeck_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 75
-        width: 218
-        height: 240
+        x: 0
+        y: 0
+        width: 1918
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,8 +111,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b006abde8c4a94164835c58c30c7b1b9
-      internalID: -2016218608
+      spriteID: 5cc0aadd17e184bdca44bec562e63374
+      internalID: 1594292938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: birdPeck_1
+      rect:
+        serializedVersion: 2
+        x: 1918
+        y: 0
+        width: 1918
+        height: 1080
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71a9e11f946444908a3dd4c2ffa705f7
+      internalID: 73091413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: birdPeck_2
+      rect:
+        serializedVersion: 2
+        x: 3836
+        y: 0
+        width: 1918
+        height: 1080
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d8c92afe3c64438bbfe465878eefa74
+      internalID: -2135321546
       vertices: []
       indices: 
       edges: []
@@ -128,7 +170,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bird2_0: -2016218608
+      birdPeck_0: 1594292938
+      birdPeck_1: 73091413
+      birdPeck_2: -2135321546
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
