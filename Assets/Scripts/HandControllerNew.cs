@@ -30,13 +30,14 @@ public class HandControllerNew : MonoBehaviour
 
     void Update()
     {
+        //Debug.Log(stateSwitched);
         //switch hand state
-        if(Input.mouseScrollDelta.y > 0.5f && !stateSwitched){
+        if(Input.mouseScrollDelta.y > 2f && !stateSwitched){
             handState += 1;
             if(handState>2){handState = 0;}
             stateSwitched = true;
         }
-        if(Input.mouseScrollDelta.y < -0.5f && !stateSwitched){
+        if(Input.mouseScrollDelta.y < -2f && !stateSwitched){
             handState -= 1;
             if(handState<0){handState = 2;}
             stateSwitched = true;
@@ -80,6 +81,12 @@ public class HandControllerNew : MonoBehaviour
             sfxPlayed = true;
         }
 
+        //elbow movement
+        if(Input.GetKeyDown(KeyCode.Mouse1)){
+            
+        }
+
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -96,5 +103,11 @@ public class HandControllerNew : MonoBehaviour
         {
             closestObj = null;
         }
+    }
+
+    void SwitchState(){
+        handState += 1;
+        if(handState>2){handState = 0;}
+
     }
 }
