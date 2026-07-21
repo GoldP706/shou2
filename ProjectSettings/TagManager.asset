@@ -6,6 +6,7 @@ TagManager:
   tags:
   - border
   - CanGrab
+  - fly
   layers:
   - Default
   - TransparentFX

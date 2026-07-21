@@ -104,10 +104,4 @@ public class HandControllerNew : MonoBehaviour
             closestObj = null;
         }
     }
-
-    void SwitchState(){
-        handState += 1;
-        if(handState>2){handState = 0;}
-
-    }
 }
