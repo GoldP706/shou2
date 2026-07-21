@@ -4,96 +4,101 @@ using UnityEngine;
 
 public class FlyMovement : MonoBehaviour
 {
-    [Header("Idle Random Drift")]
+    [Header("Random Drift")]
     public float driftSpeed = 1f;
     public float directionChangeTime = 1.5f;
     public float driftSmoothness = 3f;
+
+    // ���ص��������Ķ��ٺ�ָ��������
+    public float safeDistance = 3f;
 
     private Vector3 driftDirection;
     private Vector3 targetDriftDirection;
 
     private float driftTimer;
 
-    private Vector3 lastMousePosition;
-    private bool mouseMoving;
+    // �Ƿ����ڷ�����Ļ
+    private bool returningToScreen = false;
 
+    //check if dead
+    public bool isDead = false;
 
     void Start()
     {
         PickNewDriftDirection();
+        driftDirection = targetDriftDirection;
     }
-
 
     void Update()
     {
-        
         RandomDrift();
-        
     }
-
-
-    /*void FollowMouse()
-    {
-        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(
-            new Vector3(
-                Input.mousePosition.x,
-                Input.mousePosition.y,
-                Mathf.Abs(mainCamera.transform.position.z)
-            )
-        );
-
-        mouseWorldPosition.z = transform.position.z;
-
-        transform.position = Vector3.Lerp(
-            transform.position,
-            mouseWorldPosition,
-            followSpeed * Time.deltaTime
-        );
-    }*/
-
 
     void RandomDrift()
     {
+        //--------------------------
+        // ����״̬
+        //--------------------------
+        if (returningToScreen)
+        {
+            // ����Ļ���ķ�
+            targetDriftDirection = (Vector3.zero - transform.position).normalized;
+
+            driftDirection = Vector3.Lerp(
+                driftDirection,
+                targetDriftDirection,
+                driftSmoothness * Time.deltaTime
+            );
+
+            transform.position += driftDirection * driftSpeed * Time.deltaTime;
+
+            // �Ѿ��ص���ȫ����
+            if (Vector3.Distance(transform.position, Vector3.zero) <= safeDistance)
+            {
+                returningToScreen = false;
+                driftTimer = 0;
+                PickNewDriftDirection();
+            }
+
+            return;
+        }
+
+        //--------------------------
+        // ���Ư��
+        //--------------------------
         driftTimer += Time.deltaTime;
 
-
-        // Change direction periodically
         if (driftTimer >= directionChangeTime)
         {
             PickNewDriftDirection();
             driftTimer = 0;
         }
 
-
-        // Smooth direction change
         driftDirection = Vector3.Lerp(
             driftDirection,
             targetDriftDirection,
             driftSmoothness * Time.deltaTime
         );
 
-
         transform.position += driftDirection * driftSpeed * Time.deltaTime;
     }
-
 
     void PickNewDriftDirection()
     {
         Vector2 randomDirection = Random.insideUnitCircle.normalized;
 
         targetDriftDirection = new Vector3(
-            randomDirection.x*2,
+            randomDirection.x * 2f,
             randomDirection.y,
             0
-        );
+        ).normalized;
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.tag == "border")
+        if (other.CompareTag("border"))
         {
-            //Debug.Log("hit border");
-            targetDriftDirection = new Vector3(0,0,0);
+            returningToScreen = true;
         }
     }
 }

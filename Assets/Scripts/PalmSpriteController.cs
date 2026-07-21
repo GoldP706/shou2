@@ -8,6 +8,9 @@ public class PalmSpriteController : MonoBehaviour
     public Sprite flat;
     public Sprite side;
     public Sprite type;
+    public Sprite flatElbow;
+    public Sprite sideElbow;
+    public Sprite typeElbow;
 
     private SpriteRenderer spr;
 
@@ -32,6 +35,10 @@ public class PalmSpriteController : MonoBehaviour
         {
             spr.sprite = type;
             spr.sortingOrder = 50;
+        }
+
+        if(Input.GetKey(KeyCode.Mouse0)){
+            //elbow
         }
     }
 }
