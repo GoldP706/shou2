@@ -936,6 +936,9 @@ MonoBehaviour:
   pointerFingerTip: {fileID: 826274892}
   pointerFinger: {fileID: 1918924448}
   clickDistance: 0.4
+  minStep: 3
+  maxStep: 5
+  cooldown: 8
 --- !u!1 &765474103
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1105,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.21477625, y: 0.09071618}
