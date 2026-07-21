@@ -14,6 +14,7 @@ public class HandControllerNew : MonoBehaviour
     public int handState = 0; //0 = flat, 1 = side, 2 = type
     private bool stateSwitched = false;
 
+    [SerializeField]MouseFollowRandomDrift mouseFollow;
 
     [SerializeField]FingerController thumb;
     [SerializeField]FingerController pointer;
@@ -84,8 +85,8 @@ public class HandControllerNew : MonoBehaviour
         //elbow movement
         if(Input.GetKeyDown(KeyCode.Mouse1)){
             
-        }
 
+        }
 
     }
 
