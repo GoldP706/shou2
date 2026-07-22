@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +32,9 @@ public class TaskChecklistUI : MonoBehaviour
 
     [Tooltip("Pause gameplay after the victory screen appears.")]
     public bool pauseGameOnComplete = true;
+
+    [Tooltip("Seconds to wait after all four tasks complete before showing the victory screen.")]
+    [Min(0f)] public float victoryDelay = 2.5f;
 
     [SerializeField] private int completedTaskCount;
     [SerializeField] private bool gameCompleted;
@@ -174,6 +178,14 @@ public class TaskChecklistUI : MonoBehaviour
 
         gameCompleted = true;
 
+        StartCoroutine(ShowVictoryAfterDelay());
+        Debug.Log("All tasks completed. Victory screen will appear after " + victoryDelay + " seconds.");
+    }
+
+    private IEnumerator ShowVictoryAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(victoryDelay);
+
         if (gameCompleteScreen != null)
         {
             gameCompleteScreen.SetActive(true);
@@ -218,3 +230,4 @@ public class TaskChecklistUI : MonoBehaviour
         }
     }
 }
+
