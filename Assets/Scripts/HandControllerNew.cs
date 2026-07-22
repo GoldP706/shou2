@@ -1,228 +1,266 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandControllerNew : MonoBehaviour
+public class FlyManager : MonoBehaviour
 {
-    public bool grabbing = false;
-    public GameObject closestObj;
-    public GameObject heldObj;
+    private float stingWaitTimer;
+    public float stingWaitTimerMax = 20f;
+    private float stingingTimer;
+    public float stingingTimeMax;
 
-    private AudioSource audioSource;
-    private bool sfxPlayed = false;
+    private float respawnTimer = 3f;
+    [SerializeField] bool canRespawn = false;
+    private int elbowCount = 0;
+    private bool isStinging = false;
 
-    public int handState = 0;
-    private bool stateSwitched = false;
+    [SerializeField] SpriteRenderer stingWarningSpr;
+    [SerializeField] FlyMovement flyMovement;
+    [SerializeField] GameObject flyPrefab;
+    [SerializeField] GameObject currentFly;
 
-    [SerializeField] MouseFollowRandomDrift mouseFollow;
-    [SerializeField] FingerController thumb;
-    [SerializeField] FingerController pointer;
-    [SerializeField] FingerController middle;
-    [SerializeField] FingerController ring;
-    [SerializeField] FingerController little;
+    [Header("References")]
+    public HandControllerNew handController;
+    public Transform stingPoint;
+    public Collider2D elbowHitbox;
+    public GameObject bitePrefab;
+    public Transform handVisual;
 
-    private float handHeight = 1f;
+    [Header("Settings")]
+    public float idleThreshold = 0.3f;
+    public float idleTriggerTime = 2f;
+    public float abandonDistance = 0.5f;
+    public float warningDuration = 0.5f;
+    public float biteStayTime = 5f;
+    public float shakeDuration = 5f;
+    public float shakeStrength = 0.1f;
 
-    // A piece can have several colliders. Count them so exiting just one
-    // collider does not make the piece disappear from the nearby list.
-    private readonly Dictionary<GameObject, int> nearbyObjects =
-        new Dictionary<GameObject, int>();
+    private enum StingState { Idle, Chasing, Warning }
+    private StingState currentStingState = StingState.Idle;
 
-    private void Start()
+    private float idleTimer;
+    private float warningTimer;
+    private float shakeTimer;
+    private Vector3 chaseStartHandPos;
+    private bool wasElbowingLastFrame;
+    private Transform shakeTarget;
+    private Vector3 handVisualOriginalLocalPos;
+
+    void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        stingWaitTimer = stingWaitTimerMax;
+        currentFly = GameObject.FindWithTag("Fly");
+        if (currentFly != null)
+            flyMovement = currentFly.GetComponent<FlyMovement>();
+
+        shakeTarget = handVisual != null ? handVisual : handController.transform;
+        if (handVisual != null)
+            handVisualOriginalLocalPos = handVisual.localPosition;
+
+        if (stingWarningSpr != null) stingWarningSpr.enabled = false;
+        if (elbowHitbox != null) elbowHitbox.enabled = false;
+        chaseStartHandPos = handController.transform.position;
     }
 
-    private void Update()
+    void Update()
     {
-        UpdateHandState();
+        if (handController == null) return;
 
-        grabbing = thumb.isGrabbing &&
-            (pointer.isGrabbing || middle.isGrabbing ||
-             ring.isGrabbing || little.isGrabbing);
-
-        if (grabbing)
+        if (canRespawn)
         {
-            // Choose only once. The selected object stays locked until the
-            // hand actually opens, even if its collider leaves the palm.
-            if (heldObj == null)
+            respawnTimer -= Time.deltaTime;
+            if (respawnTimer <= 0)
             {
-                heldObj = FindClosestNearbyObject();
-                closestObj = heldObj;
+                Spawn();
+                respawnTimer = 3f;
+            }
+        }
 
-                if (heldObj != null)
+        if (currentFly != null && flyMovement != null && !flyMovement.isDead)
+        {
+            if (currentStingState == StingState.Idle)
+                stingWaitTimer -= Time.deltaTime;
+        }
+        if (currentFly == null || (flyMovement != null && flyMovement.isDead))
+        {
+            canRespawn = true;
+        }
+        if (isStinging)
+        {
+            stingingTimer += Time.deltaTime;
+        }
+
+        if (flyMovement == null || flyMovement.isDead || currentFly == null)
+        {
+            ResetStingState();
+            return;
+        }
+
+        bool isElbowingNow = !handController.mouseFollow.enabled;
+
+        if (isElbowingNow && !wasElbowingLastFrame)
+        {
+            if (elbowHitbox != null) elbowHitbox.enabled = true;
+        }
+        if (!isElbowingNow && wasElbowingLastFrame)
+        {
+            if (elbowHitbox != null) elbowHitbox.enabled = false;
+            chaseStartHandPos = handController.transform.position;
+        }
+        wasElbowingLastFrame = isElbowingNow;
+
+        if (isElbowingNow && elbowHitbox != null)
+        {
+            Collider2D[] hits = Physics2D.OverlapBoxAll(elbowHitbox.bounds.center, elbowHitbox.bounds.size, 0);
+            foreach (var hit in hits)
+            {
+                if (hit.CompareTag("Fly"))
                 {
-                    TetrisSnap2D snap = heldObj.GetComponent<TetrisSnap2D>();
-                    if (snap != null)
+                    elbowCount++;
+                    Vector3 knockDir = (flyMovement.transform.position - handController.transform.position).normalized;
+                    flyMovement.GetKnockedBack(knockDir);
+                    if (currentStingState == StingState.Warning)
                     {
-                        snap.BeginGrab();
+                        currentStingState = StingState.Chasing;
+                        if (stingWarningSpr != null) stingWarningSpr.enabled = false;
+                        warningTimer = 0;
                     }
-                }
-
-                if (heldObj != null && !sfxPlayed)
-                {
-                    if (audioSource != null)
-                    {
-                        audioSource.Play();
-                    }
-
-                    sfxPlayed = true;
+                    chaseStartHandPos = handController.transform.position;
+                    break;
                 }
             }
+        }
 
-            if (heldObj != null)
+        if (currentStingState == StingState.Idle)
+        {
+            float handMoveDist = Vector3.Distance(handController.transform.position, chaseStartHandPos);
+            if (handMoveDist < idleThreshold)
             {
-                TargetJoint2D joint = heldObj.GetComponent<TargetJoint2D>();
-                if (joint != null)
+                idleTimer += Time.deltaTime;
+                if (idleTimer >= idleTriggerTime)
                 {
-                    joint.target = transform.position;
+                    StartChasing();
                 }
+            }
+            else
+            {
+                idleTimer = 0;
+                chaseStartHandPos = handController.transform.position;
+            }
+
+            if (stingWaitTimer <= 0)
+            {
+                StartChasing();
+                stingWaitTimer = stingWaitTimerMax;
+            }
+        }
+
+        switch (currentStingState)
+        {
+            case StingState.Chasing:
+                if (!isElbowingNow && Vector3.Distance(handController.transform.position, chaseStartHandPos) > abandonDistance)
+                {
+                    ResetStingState();
+                    stingWaitTimer = stingWaitTimerMax;
+                    break;
+                }
+                if (Vector3.Distance(flyMovement.transform.position, stingPoint.position) < 0.2f)
+                {
+                    currentStingState = StingState.Warning;
+                    warningTimer = warningDuration;
+                    if (stingWarningSpr != null) stingWarningSpr.enabled = true;
+                }
+                break;
+
+            case StingState.Warning:
+                if (!isElbowingNow && Vector3.Distance(handController.transform.position, chaseStartHandPos) > abandonDistance)
+                {
+                    ResetStingState();
+                    stingWaitTimer = stingWaitTimerMax;
+                    break;
+                }
+                warningTimer -= Time.deltaTime;
+                if (warningTimer <= 0)
+                {
+                    StingSuccess();
+                }
+                break;
+        }
+
+        if (shakeTimer > 0)
+        {
+            shakeTimer -= Time.deltaTime;
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (shakeTarget == null) return;
+
+        if (shakeTimer > 0)
+        {
+            if (handVisual != null)
+            {
+                shakeTarget.localPosition = handVisualOriginalLocalPos + (Vector3)Random.insideUnitCircle * shakeStrength;
             }
         }
         else
         {
-            ReleaseHeldObject();
-            closestObj = FindClosestNearbyObject();
-        }
-        
-        //elbow movement
-        if(Input.GetKeyDown(KeyCode.Mouse1)){
-            mouseFollow.enabled = false;
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x+1, gameObject.transform.position.y-0.5f, 0f);
-
-        }
-        if(Input.GetKeyUp(KeyCode.Mouse1)){
-            mouseFollow.enabled = true;
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x-1, gameObject.transform.position.y+0.5f, 0f);
+            if (handVisual != null)
+                shakeTarget.localPosition = handVisualOriginalLocalPos;
         }
     }
 
-    private void UpdateHandState()
+    void Spawn()
     {
-        if (Input.mouseScrollDelta.y > 0.5f && !stateSwitched)
-        {
-            handState++;
-            if (handState > 2) handState = 0;
-            stateSwitched = true;
-        }
+        var spawn = new Vector3(15f, Random.Range(10, -10), 0f);
+        GameObject Fly = Instantiate(flyPrefab, spawn, Quaternion.identity);
+        currentFly = Fly;
+        flyMovement = Fly.GetComponent<FlyMovement>();
+        canRespawn = false;
 
-        if (Input.mouseScrollDelta.y < -0.5f && !stateSwitched)
+        flyMovement.chaseTarget = stingPoint;
+        Vector3 viewportPos = Camera.main.WorldToViewportPoint(Fly.transform.position);
+        if (viewportPos.x < 0 || viewportPos.x > 1 || viewportPos.y < 0 || viewportPos.y > 1)
         {
-            handState--;
-            if (handState < 0) handState = 2;
-            stateSwitched = true;
+            flyMovement.TriggerReturnScreen();
         }
-
-        if (Input.mouseScrollDelta.y == 0f)
-        {
-            stateSwitched = false;
-        }
-
-        if (Input.GetKey(KeyCode.Mouse0) && handHeight > 0f)
-        {
-            handHeight -= 0.1f;
-        }
-
-        if (Input.GetKey(KeyCode.Mouse1) && handHeight > 1f)
-        {
-            handHeight += 0.1f;
-        }
+        ResetStingState();
+        stingWaitTimer = stingWaitTimerMax;
+        isStinging = false;
+        stingingTimer = 0;
     }
 
-    private void ReleaseHeldObject()
+    void StartChasing()
     {
-        if (heldObj == null)
-        {
-            return;
-        }
-
-        TetrisSnap2D snap = heldObj.GetComponent<TetrisSnap2D>();
-        if (snap != null)
-        {
-            snap.TrySnapToGrid();
-        }
-
-        heldObj = null;
-        sfxPlayed = false;
+        currentStingState = StingState.Chasing;
+        chaseStartHandPos = handController.transform.position;
+        flyMovement.StartChasing(stingPoint);
+        idleTimer = 0;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void ResetStingState()
     {
-        GameObject grabbable = FindGrabbableRoot(other);
-        if (grabbable == null)
-        {
-            return;
-        }
-
-        if (nearbyObjects.ContainsKey(grabbable))
-        {
-            nearbyObjects[grabbable]++;
-        }
-        else
-        {
-            nearbyObjects.Add(grabbable, 1);
-        }
-
-        if (!grabbing && heldObj == null)
-        {
-            closestObj = FindClosestNearbyObject();
-        }
+        currentStingState = StingState.Idle;
+        if (flyMovement != null) flyMovement.StopChasing();
+        if (stingWarningSpr != null) stingWarningSpr.enabled = false;
+        if (elbowHitbox != null) elbowHitbox.enabled = false;
+        warningTimer = 0;
+        idleTimer = 0;
+        wasElbowingLastFrame = false;
+        isStinging = false;
+        stingingTimer = 0;
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    void StingSuccess()
     {
-        GameObject grabbable = FindGrabbableRoot(other);
-        if (grabbable == null || !nearbyObjects.ContainsKey(grabbable))
+        if (bitePrefab != null && stingPoint != null)
         {
-            return;
+            GameObject bite = Instantiate(bitePrefab, stingPoint.position, Quaternion.identity, handController.transform);
+            Destroy(bite, biteStayTime);
         }
-
-        nearbyObjects[grabbable]--;
-        if (nearbyObjects[grabbable] <= 0)
-        {
-            nearbyObjects.Remove(grabbable);
-        }
-
-        // Never change heldObj here. It is released only when the hand opens.
-        if (!grabbing && heldObj == null)
-        {
-            closestObj = FindClosestNearbyObject();
-        }
-    }
-
-    private GameObject FindGrabbableRoot(Collider2D other)
-    {
-        TargetJoint2D joint = other.GetComponentInParent<TargetJoint2D>();
-        GameObject candidate = joint != null ? joint.gameObject : other.gameObject;
-
-        return candidate.CompareTag("CanGrab") ? candidate : null;
-    }
-
-    private GameObject FindClosestNearbyObject()
-    {
-        GameObject nearest = null;
-        float nearestDistance = float.PositiveInfinity;
-
-        foreach (KeyValuePair<GameObject, int> pair in nearbyObjects)
-        {
-            if (pair.Key == null || pair.Value <= 0 ||
-                !pair.Key.CompareTag("CanGrab"))
-            {
-                continue;
-            }
-
-            float distance =
-                ((Vector2)pair.Key.transform.position -
-                 (Vector2)transform.position).sqrMagnitude;
-
-            if (distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                nearest = pair.Key;
-            }
-        }
-
-        return nearest;
+        shakeTimer = shakeDuration;
+        ResetStingState();
+        stingWaitTimer = stingWaitTimerMax;
     }
 }
-
-
