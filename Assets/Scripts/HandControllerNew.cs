@@ -14,11 +14,11 @@ public class HandControllerNew : MonoBehaviour
     private bool stateSwitched = false;
 
     [SerializeField] MouseFollowRandomDrift mouseFollow;
-    [SerializeField] FingerController thumb;
-    [SerializeField] FingerController pointer;
-    [SerializeField] FingerController middle;
-    [SerializeField] FingerController ring;
-    [SerializeField] FingerController little;
+    [SerializeField] public FingerController thumb;
+    [SerializeField] public FingerController pointer;
+    [SerializeField] public FingerController middle;
+    [SerializeField] public FingerController ring;
+    [SerializeField] public FingerController little;
 
     private float handHeight = 1f;
 

@@ -26,6 +26,18 @@ public class BirdStateController : MonoBehaviour
     [Tooltip("可选：拖入 HandPrefab。留空时保持原逻辑，任何进入鸟触发器的碰撞体都可建立接触。")]
     public Transform handRoot;
 
+    [Tooltip("实际会移动或旋转的手指 Transform。留空时自动寻找 Hand Root 下的 FingerController。")]
+    public Transform[] fingerTransforms;
+
+    [Tooltip("手指位置至少变化多少才算真的移动")]
+    public float fingerPositionThreshold = 0.002f;
+
+    [Tooltip("手指旋转至少变化多少度才算真的移动")]
+    public float fingerRotationThreshold = 0.5f;
+
+    [Tooltip("按键与实际手指动作允许相差的时间")]
+    public float fingerMovementMemory = 0.35f;
+
     [Header("原鸟愤怒移动参数")]
     [Tooltip("原鸟移出屏幕的速度")]
     public float angryMoveSpeed = 15f;
@@ -79,6 +91,13 @@ public class BirdStateController : MonoBehaviour
     private Dictionary<FingerController, bool> fingerPrevState = new Dictionary<FingerController, bool>();
     private bool birdTouched = false;
     private HashSet<Collider2D> touchingHandColliders = new HashSet<Collider2D>();
+    private Vector3[] previousFingerPositions;
+    private Quaternion[] previousFingerRotations;
+    private Vector3[] previousFingerScales;
+    private float fingerMovementValidUntil = -1f;
+    private float fingerInputValidUntil = -1f;
+    private bool fingerInputPending = false;
+    [SerializeField]HandControllerNew handController;
 
     // 愤怒移动方向
     private Vector2 moveDirection;
@@ -98,6 +117,8 @@ public class BirdStateController : MonoBehaviour
 
         startPosition = transform.position;
         originalScale = transform.localScale;
+
+        InitializeFingerTracking();
 
         // 缓存临时鸟初始位置，默认隐藏
         if (tempBird != null)
@@ -121,7 +142,9 @@ public class BirdStateController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(petCount);
+
+        DetectActualFingerMovement();
+        DetectFingerInput();
 
         switch (currentState)
         {
@@ -212,8 +235,15 @@ public class BirdStateController : MonoBehaviour
     {
         if (!birdTouched) { return; }
 
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.Space))
+        // 必须同时存在一次手指按键和一次真实的手指 Transform 变化。
+        if (handController.thumb.isGrabbing || handController.pointer.isGrabbing || handController.middle.isGrabbing ||
+             handController.ring.isGrabbing || handController.little.isGrabbing)
         {
+            /*fingerInputPending = false;
+            fingerInputValidUntil = -1f;
+            fingerMovementValidUntil = -1f;
+            */
+
             petCount++;
             Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
 
@@ -228,6 +258,79 @@ public class BirdStateController : MonoBehaviour
 
                 EnterIdle();
             }
+        }
+    }
+
+    void InitializeFingerTracking()
+    {
+        if ((fingerTransforms == null || fingerTransforms.Length == 0) && handRoot != null)
+        {
+            FingerController[] controllers = handRoot.GetComponentsInChildren<FingerController>(true);
+            fingerTransforms = new Transform[controllers.Length];
+
+            for (int i = 0; i < controllers.Length; i++)
+            {
+                fingerTransforms[i] = controllers[i].transform;
+            }
+        }
+
+        int count = fingerTransforms == null ? 0 : fingerTransforms.Length;
+        previousFingerPositions = new Vector3[count];
+        previousFingerRotations = new Quaternion[count];
+        previousFingerScales = new Vector3[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            Transform finger = fingerTransforms[i];
+            if (finger == null) { continue; }
+
+            previousFingerPositions[i] = finger.localPosition;
+            previousFingerRotations[i] = finger.localRotation;
+            previousFingerScales[i] = finger.localScale;
+        }
+    }
+
+    void DetectActualFingerMovement()
+    {
+        if (fingerTransforms == null) { return; }
+
+        bool moved = false;
+
+        for (int i = 0; i < fingerTransforms.Length; i++)
+        {
+            Transform finger = fingerTransforms[i];
+            if (finger == null) { continue; }
+
+            if (Vector3.Distance(finger.localPosition, previousFingerPositions[i]) > fingerPositionThreshold ||
+                Quaternion.Angle(finger.localRotation, previousFingerRotations[i]) > fingerRotationThreshold ||
+                Vector3.Distance(finger.localScale, previousFingerScales[i]) > fingerPositionThreshold)
+            {
+                moved = true;
+            }
+
+            previousFingerPositions[i] = finger.localPosition;
+            previousFingerRotations[i] = finger.localRotation;
+            previousFingerScales[i] = finger.localScale;
+        }
+
+        // 只有正在接触尖叫状态的鸟时发生的真实手指动作才有效。
+        if (moved && birdTouched && currentState == BirdState.Screaming)
+        {
+            fingerMovementValidUntil = Time.time + fingerMovementMemory;
+        }
+    }
+
+    void DetectFingerInput()
+    {
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.Space))
+        {
+            fingerInputPending = true;
+            fingerInputValidUntil = Time.time + fingerMovementMemory;
+        }
+
+        if (fingerInputPending && Time.time > fingerInputValidUntil)
+        {
+            fingerInputPending = false;
         }
     }
 
@@ -388,4 +491,5 @@ public class BirdStateController : MonoBehaviour
         }
     }
 }
+
 
