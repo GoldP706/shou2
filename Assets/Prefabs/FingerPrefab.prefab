@@ -98,5 +98,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: 32
+  handController: {fileID: 0}
   grab: {fileID: 76913376977288734, guid: 11aa9f71607104f37a937b46f23cacf6, type: 3}
   open: {fileID: -6640658354156928833, guid: f52b92ce05c544aa68c1ad140e734fa7, type: 3}
+  sideGrab: {fileID: 0}
+  sideOpen: {fileID: 0}
+  type1: {fileID: 0}
+  type2: {fileID: 0}
+  openSprite: {fileID: 0}
+  grabSprite: {fileID: 0}
+  holdTimerMax: 2
+  isGrabbing: 0

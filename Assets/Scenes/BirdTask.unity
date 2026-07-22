@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 41266283}
   - component: {fileID: 41266282}
   m_Layer: 0
-  m_Name: TetrisEmptyBox coffee
+  m_Name: CoffeeEmptyBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 174237960}
   - component: {fileID: 174237959}
   m_Layer: 0
-  m_Name: TetrisEmptyBox tetris
+  m_Name: TetrisEmptyBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 237085356}
   - component: {fileID: 237085355}
   m_Layer: 0
-  m_Name: TetrisEmptyBox bird
+  m_Name: BirdEmptyBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1234,6 +1234,7 @@ GameObject:
   - component: {fileID: 401807384}
   - component: {fileID: 401807385}
   - component: {fileID: 401807386}
+  - component: {fileID: 401807387}
   m_Layer: 0
   m_Name: CoffeeCup
   m_TagString: Untagged
@@ -1514,6 +1515,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &401807387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401807378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 482cdff8f866c4062ba035b17c62cc76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coffeeCupBehavior: {fileID: 401807384}
+  taskChecklist: {fileID: 957391197}
+  taskId: coffee
+  taskCompleted: 0
 --- !u!1001 &495522105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1591,7 +1608,7 @@ GameObject:
   - component: {fileID: 518149957}
   - component: {fileID: 518149956}
   m_Layer: 0
-  m_Name: TetrisCheck bird
+  m_Name: BirdCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1862,7 +1879,7 @@ GameObject:
   - component: {fileID: 579258115}
   - component: {fileID: 579258114}
   m_Layer: 0
-  m_Name: TetrisCheck coffee
+  m_Name: CoffeeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2777,6 +2794,8 @@ MonoBehaviour:
   maxStep: 5
   totalTaskCount: 3
   cooldown: 8
+  taskChecklist: {fileID: 957391197}
+  taskId: typing
 --- !u!1 &765474103
 GameObject:
   m_ObjectHideFlags: 0
@@ -2908,7 +2927,7 @@ GameObject:
   - component: {fileID: 801841176}
   - component: {fileID: 801841175}
   m_Layer: 0
-  m_Name: TetrisCheck type
+  m_Name: TypeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3303,6 +3322,29 @@ MonoBehaviour:
   - taskId: tetris
     checkMark: {fileID: 639960583}
     incompleteMark: {fileID: 174237958}
+    keepIncompleteMarkWhenCompleted: 1
+    completed: 0
+  - taskId: bird
+    checkMark: {fileID: 518149954}
+    incompleteMark: {fileID: 237085353}
+    keepIncompleteMarkWhenCompleted: 1
+    completed: 0
+  - taskId: typing
+    checkMark: {fileID: 801841173}
+    incompleteMark: {fileID: 2023554599}
+    keepIncompleteMarkWhenCompleted: 1
+    completed: 0
+  - taskId: coffee
+    checkMark: {fileID: 579258112}
+    incompleteMark: {fileID: 41266280}
+    keepIncompleteMarkWhenCompleted: 1
+    completed: 0
+  gameCompleteScreen: {fileID: 0}
+  onAllTasksCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  completedTaskCount: 0
+  gameCompleted: 0
 --- !u!224 &957391198
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3959,6 +4001,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coffeeCupBehavior: {fileID: 401807384}
+  taskChecklist: {fileID: 0}
+  taskId: coffee
+  taskCompleted: 0
 --- !u!82 &1278840108
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4518,9 +4563,6 @@ PrefabInstance:
       addedObject: {fileID: 1391893548}
     - targetCorrespondingSourceObject: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1391893551}
-    - targetCorrespondingSourceObject: {fileID: 4269237028854369917, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1391893550}
   m_SourcePrefab: {fileID: 100100000, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
 --- !u!1 &1391893547 stripped
@@ -4557,10 +4599,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minIdleTime: 10
   maxIdleTime: 15
-  screamDuration: 2
+  screamDuration: 4
   peckDelay: 3
   birdReturnDelay: 2
-  requiredPets: 2
+  requiredPets: 1
+  handRoot: {fileID: 2045379969}
+  fingerTransforms:
+  - {fileID: 1763580328}
+  - {fileID: 1566533877}
+  fingerPositionThreshold: 0.002
+  fingerRotationThreshold: 0.5
+  fingerMovementMemory: 0.35
   angryMoveSpeed: 15
   flashDuration: 0.5
   angryScale: 0.5
@@ -4573,22 +4622,10 @@ MonoBehaviour:
   - {fileID: 603096758}
   afterImage: {fileID: 1391893548}
   hasCalmedBird: 0
---- !u!114 &1391893550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391893547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75e81ef7fc3a146cba12bb753dc9efd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  taskChecklist: {fileID: 0}
+  taskChecklist: {fileID: 957391197}
   taskId: bird
-  completed: 0
---- !u!58 &1391893551
+  handController: {fileID: 2045379959}
+--- !u!58 &1391893550
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4620,9 +4657,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.088256896, y: 0.38612324}
   serializedVersion: 2
-  m_Radius: 1.6687499
+  m_Radius: 0.92959934
 --- !u!1 &1465224670
 GameObject:
   m_ObjectHideFlags: 0
@@ -5057,6 +5094,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &1566533877 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6578213971068313236, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+  m_PrefabInstance: {fileID: 886381900}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1639071256
 GameObject:
   m_ObjectHideFlags: 0
@@ -6030,7 +6072,7 @@ GameObject:
   - component: {fileID: 2023554602}
   - component: {fileID: 2023554601}
   m_Layer: 0
-  m_Name: TetrisEmptyBox type
+  m_Name: TypeEmptyBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6319,6 +6361,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!4 &2045379969 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5940187871688797898, guid: c7b964fb5a2af45d29ffb484d61e0377, type: 3}
+  m_PrefabInstance: {fileID: 886381900}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2092369400
 GameObject:
   m_ObjectHideFlags: 0
