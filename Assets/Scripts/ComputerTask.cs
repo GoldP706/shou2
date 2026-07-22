@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 
 public class ComputerTask : MonoBehaviour
-
 {
     public bool taskCompleted = false;
     public KeyboardArea keyboardArea;
@@ -11,10 +10,10 @@ public class ComputerTask : MonoBehaviour
 
     public HandControllerNew hand;
 
-    [Header("��ʳָ�� Transform ��Ϊָ������")]
+    [Header("食指指尖 Transform")]
     public Transform pointerFingerTip;
 
-    [Header("ʳָ�����ж�������ʳָ�� FingerController��")]
+    [Header("食指 FingerController")]
     public FingerController pointerFinger;
 
     public float clickDistance = 0.4f;
@@ -23,11 +22,18 @@ public class ComputerTask : MonoBehaviour
     public int minStep = 3;
     public int maxStep = 5;
 
-    [Header("���������")]
+    [Header("完成任务需要的轮数")]
     public int totalTaskCount = 3;
 
     [Header("Cooldown")]
     public float cooldown = 8f;
+
+    [Header("任务栏连接")]
+    [Tooltip("拖入挂有 TaskChecklistUI 的 TaskCanvas")]
+    public TaskChecklistUI taskChecklist;
+
+    [Tooltip("任务栏中打字任务的 Task Id")]
+    public string taskId = "typing";
 
     private int currentStep;
     private int targetStep;
@@ -36,7 +42,7 @@ public class ComputerTask : MonoBehaviour
 
     private bool taskRunning = false;
 
-    // ��¼��һ֡ʳָ�Ƿ�������״̬�����ڱ�Ե��⣨ֻ��"������ȥ"��һ֡��һ�ε����
+    // 记录上一帧食指是否处于弯曲状态，用于边缘检测。
     private bool wasGrabbingLastFrame = false;
 
     void Start()
@@ -53,9 +59,7 @@ public class ComputerTask : MonoBehaviour
 
         bool isGrabbingNow = pointerFinger.isGrabbing;
 
-        
-
-        // ֻ�д�"û��"���"����"����һ֡�Ŵ���һ�� TryClick
+        // 只有从“未弯曲”变成“弯曲”的一帧才点击一次。
         if (isGrabbingNow && !wasGrabbingLastFrame)
         {
             TryClick();
@@ -68,14 +72,12 @@ public class ComputerTask : MonoBehaviour
     {
         keyPointer.position = keyboardArea.GetRandomPoint();
     }
-  
 
     void TryClick()
     {
-        // ֻ�� Type ���Ʋ��ܴ���
+        // 只有 Type 手势才能触发。
         if (hand.handState != 2)
         {
-            //Debug.Log("���� Type ����");
             return;
         }
 
@@ -84,11 +86,10 @@ public class ComputerTask : MonoBehaviour
             keyPointer.position
         );
 
-        Debug.Log("���룺" + distance);
+        Debug.Log("距离：" + distance);
 
         if (distance <= clickDistance)
         {
-            //Debug.Log("����ɹ���");
             CorrectClick();
         }
     }
@@ -96,8 +97,6 @@ public class ComputerTask : MonoBehaviour
     void CorrectClick()
     {
         currentStep++;
-
-        //Debug.Log("Correct : " + currentStep + "/" + targetStep);
 
         if (currentStep >= targetStep)
         {
@@ -121,28 +120,28 @@ public class ComputerTask : MonoBehaviour
 
         MovePointer();
 
-        // ���ñ�Ե���״̬����������һ��ʼ����Ϊ����԰�ס��һ�ζ������󴥷�
+        // 防止任务开始时手指已经按住而误触发。
         wasGrabbingLastFrame = pointerFinger.isGrabbing;
-
-        //Debug.Log("Computer Task Start, ������Ҫ��� " + targetStep + " ��");
     }
 
     void FinishTask()
     {
-        //Debug.Log("Computer Task Finish");
-
         taskRunning = false;
 
         keyPointer.gameObject.SetActive(false);
 
         finishedTaskCount++;
 
-        //Debug.Log("����ɵ������� " + finishedTaskCount + " / " + totalTaskCount);
-
         if (finishedTaskCount >= totalTaskCount)
         {
             taskCompleted = true;
-            //Debug.Log("��������ȫ����ɣ����ټ���");
+
+            // 只有全部三轮完成后，才通知任务栏打勾。
+            if (taskChecklist != null)
+            {
+                taskChecklist.CompleteTask(taskId);
+            }
+
             return;
         }
 
@@ -156,4 +155,5 @@ public class ComputerTask : MonoBehaviour
         StartTask();
     }
 }
+
 

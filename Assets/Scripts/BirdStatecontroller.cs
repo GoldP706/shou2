@@ -23,6 +23,8 @@ public class BirdStateController : MonoBehaviour
     [Header("抚摸参数")]
     [Tooltip("安抚成功需要的抚摸次数")]
     public int requiredPets;
+    [Tooltip("可选：拖入 HandPrefab。留空时保持原逻辑，任何进入鸟触发器的碰撞体都可建立接触。")]
+    public Transform handRoot;
 
     [Header("原鸟愤怒移动参数")]
     [Tooltip("原鸟移出屏幕的速度")]
@@ -48,10 +50,16 @@ public class BirdStateController : MonoBehaviour
     [Tooltip("残影脚本引用")]
     public AfterImageEffect afterImage;
 
-    // ✅ 新增：任务状态标记，默认false，安抚成功后永久为true
+    // 任务状态标记，默认false，安抚成功后永久为true
     [Header("任务状态")]
     [Tooltip("玩家是否成功通过抚摸安抚过鸟（任务完成标记）")]
     public bool hasCalmedBird = false;
+
+    [Header("任务栏连接")]
+    [Tooltip("拖入挂有 TaskChecklistUI 的 TaskCanvas")]
+    public TaskChecklistUI taskChecklist;
+    [Tooltip("任务栏中摸鸟任务的 Task Id")]
+    public string taskId = "bird";
 
     // 状态
     public BirdState currentState { get; private set; }
@@ -70,6 +78,7 @@ public class BirdStateController : MonoBehaviour
     private int petCount;
     private Dictionary<FingerController, bool> fingerPrevState = new Dictionary<FingerController, bool>();
     private bool birdTouched = false;
+    private HashSet<Collider2D> touchingHandColliders = new HashSet<Collider2D>();
 
     // 愤怒移动方向
     private Vector2 moveDirection;
@@ -120,7 +129,12 @@ public class BirdStateController : MonoBehaviour
                 UpdateIdle();
                 break;
             case BirdState.Screaming:
-                UpdateScreaming();
+                // 输入检测放在 Update 中，避免 OnTriggerStay2D 漏掉 GetKeyDown。
+                UpdatePetting();
+                if (currentState == BirdState.Screaming)
+                {
+                    UpdateScreaming();
+                }
                 break;
             case BirdState.Angry:
                 break;
@@ -194,36 +208,59 @@ public class BirdStateController : MonoBehaviour
         }
     }
 
+    void UpdatePetting()
+    {
+        if (!birdTouched) { return; }
+
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.Space))
+        {
+            petCount++;
+            Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
+
+            if (petCount >= requiredPets)
+            {
+                hasCalmedBird = true;
+
+                if (taskChecklist != null)
+                {
+                    taskChecklist.CompleteTask(taskId);
+                }
+
+                EnterIdle();
+            }
+        }
+    }
+
     // 检测抚摸（手指弯曲上升沿）
     void OnTriggerStay2D(Collider2D other)
     {
         Debug.Log("bird");
-        if (currentState != BirdState.Screaming) {return;}
+        if (!IsHandCollider(other)) { return; }
 
-        if (Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)||Input.GetKeyDown(KeyCode.Space))
-        {
-                petCount++;
-                Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
-
-                if (petCount >= requiredPets)
-                {
-                    // ✅ 抚摸成功，标记任务完成（仅加了这一行，其他逻辑不动）
-                    hasCalmedBird = true;
-                    EnterIdle();
-                    return;
-                }
-        }
-
-        //fingerPrevState[finger] = currentGrab;
+        touchingHandColliders.Add(other);
+        birdTouched = touchingHandColliders.Count > 0;
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
+        touchingHandColliders.Remove(other);
+        birdTouched = touchingHandColliders.Count > 0;
+
         FingerController finger = other.GetComponent<FingerController>();
         if (finger != null && fingerPrevState.ContainsKey(finger))
         {
             fingerPrevState.Remove(finger);
         }
+    }
+
+    bool IsHandCollider(Collider2D other)
+    {
+        if (handRoot == null)
+        {
+            return true;
+        }
+
+        return other.transform == handRoot || other.transform.IsChildOf(handRoot);
     }
 
     // ========== 愤怒状态协程 ==========
@@ -351,3 +388,4 @@ public class BirdStateController : MonoBehaviour
         }
     }
 }
+
