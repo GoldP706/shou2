@@ -29,6 +29,9 @@ public class TaskChecklistUI : MonoBehaviour
     [Tooltip("Optional sound, animation, or other response.")]
     public UnityEvent onAllTasksCompleted;
 
+    [Tooltip("Pause gameplay after the victory screen appears.")]
+    public bool pauseGameOnComplete = true;
+
     [SerializeField] private int completedTaskCount;
     [SerializeField] private bool gameCompleted;
 
@@ -177,7 +180,24 @@ public class TaskChecklistUI : MonoBehaviour
         }
 
         onAllTasksCompleted?.Invoke();
+
+        if (pauseGameOnComplete)
+        {
+            Time.timeScale = 0f;
+        }
+
         Debug.Log("All tasks completed. Game complete screen shown.");
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1f;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     [ContextMenu("TEST - Complete All Tasks (Play Mode Only)")]
