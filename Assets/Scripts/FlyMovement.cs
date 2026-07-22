@@ -22,28 +22,16 @@ public class FlyMovement : MonoBehaviour
 
     //check if dead
     public bool isDead = false;
-    private GameObject hand;
-    [SerializeField] HandControllerNew handController;
-
-    private Rigidbody2D rb;
 
     void Start()
     {
         PickNewDriftDirection();
         driftDirection = targetDriftDirection;
-        hand = GameObject.Find("HandPrefab");
-        handController = hand.GetComponent<HandControllerNew>();
-        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        Debug.Log(isDead);
         RandomDrift();
-        if(isDead){
-            driftSpeed = 0;
-            rb.gravityScale = 3;
-        }
     }
 
     void RandomDrift()
@@ -108,22 +96,6 @@ public class FlyMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("border"))
-        {
-            returningToScreen = true;
-        }
-    }
-
-//catch fly
-    void OnTriggerStay2D(Collider2D other){
-        if (other.CompareTag("catchCollider") && handController.handState == 0){
-            if(Input.GetKey(KeyCode.Space)){
-                if(Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.E)||Input.GetKeyDown(KeyCode.R)||Input.GetKeyDown(KeyCode.T)){                    isDead = true;
-                    isDead = true;
-                    //Destroy(gameObject);
-                }
-            }
-        }
         if (other.CompareTag("border"))
         {
             returningToScreen = true;
