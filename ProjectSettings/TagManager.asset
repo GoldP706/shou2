@@ -51,3 +51,6 @@ TagManager:
   - name: Hand
     uniqueID: 842945215
     locked: 0
+  - name: birds
+    uniqueID: 920543937
+    locked: 0
