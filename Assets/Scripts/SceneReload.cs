@@ -1,22 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneReload : MonoBehaviour
 {
-    string currentSceneName;
-
-    void Start()
+    private void Update()
     {
-        currentSceneName = SceneManager.GetActiveScene().name;
-    }
-
-    void Update()
-    {
-        if(Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(currentSceneName);
+            // ESC means retry the gameplay itself, not return to the cover.
+            StartScreenController.SkipStartScreenOnNextLoad();
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

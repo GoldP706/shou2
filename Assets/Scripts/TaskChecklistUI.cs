@@ -36,20 +36,39 @@ public class TaskChecklistUI : MonoBehaviour
     [Tooltip("Seconds to wait after all four tasks complete before showing the victory screen.")]
     [Min(0f)] public float victoryDelay = 2.5f;
 
+    [Header("Game failure")]
+    [Tooltip("A separate full-screen Canvas or Panel shown after the bird pecks the screen three times.")]
+    public GameObject gameFailureScreen;
+
+    [Tooltip("Seconds to wait after the third peck before showing the failure screen.")]
+    [Min(0f)] public float failureDelay = 1.5f;
+
     [SerializeField] private int completedTaskCount;
     [SerializeField] private bool gameCompleted;
+    [SerializeField] private bool gameFailed;
 
     public int CompletedTaskCount => completedTaskCount;
     public bool GameCompleted => gameCompleted;
+    public bool GameFailed => gameFailed;
 
     private void Start()
     {
+        // Scene reload does not always restore the global time scale.
+        // Make sure ESC retry starts the game normally after win or failure.
+        Time.timeScale = 1f;
+
         gameCompleted = false;
+        gameFailed = false;
         completedTaskCount = 0;
 
         if (gameCompleteScreen != null)
         {
             gameCompleteScreen.SetActive(false);
+        }
+
+        if (gameFailureScreen != null)
+        {
+            gameFailureScreen.SetActive(false);
         }
 
         if (tasks == null)
@@ -80,7 +99,7 @@ public class TaskChecklistUI : MonoBehaviour
 
     public void CompleteTask(string taskId)
     {
-        if (tasks == null)
+        if (tasks == null || gameFailed)
         {
             return;
         }
@@ -163,7 +182,7 @@ public class TaskChecklistUI : MonoBehaviour
 
     private void CheckForGameComplete()
     {
-        if (gameCompleted || tasks == null || tasks.Length == 0)
+        if (gameCompleted || gameFailed || tasks == null || tasks.Length == 0)
         {
             return;
         }
@@ -201,6 +220,44 @@ public class TaskChecklistUI : MonoBehaviour
         Debug.Log("All tasks completed. Game complete screen shown.");
     }
 
+    public void FailGame()
+    {
+        if (gameCompleted || gameFailed)
+        {
+            return;
+        }
+
+        gameFailed = true;
+
+        // Prevent a delayed victory screen from appearing after failure.
+        StopAllCoroutines();
+
+        if (gameCompleteScreen != null)
+        {
+            gameCompleteScreen.SetActive(false);
+        }
+
+        StartCoroutine(ShowFailureAfterDelay());
+        Debug.Log("Game failed. Failure screen will appear after " + failureDelay + " seconds.");
+    }
+
+    private IEnumerator ShowFailureAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(failureDelay);
+
+        if (gameFailureScreen != null)
+        {
+            gameFailureScreen.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Game failed, but Game Failure Screen is not assigned.");
+        }
+
+        Time.timeScale = 0f;
+        Debug.Log("Game failed: the bird pecked the screen three times.");
+    }
+
     public void QuitGame()
     {
         Time.timeScale = 1f;
@@ -230,4 +287,3 @@ public class TaskChecklistUI : MonoBehaviour
         }
     }
 }
-

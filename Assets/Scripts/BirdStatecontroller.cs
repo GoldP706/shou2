@@ -26,9 +26,6 @@ public class BirdStateController : MonoBehaviour
     [Tooltip("可选：拖入 HandPrefab。留空时保持原逻辑，任何进入鸟触发器的碰撞体都可建立接触。")]
     public Transform handRoot;
 
-    [Tooltip("实际会移动或旋转的手指 Transform。留空时自动寻找 Hand Root 下的 FingerController。")]
-    public Transform[] fingerTransforms;
-
     [Tooltip("手指位置至少变化多少才算真的移动")]
     public float fingerPositionThreshold = 0.002f;
 
@@ -91,13 +88,14 @@ public class BirdStateController : MonoBehaviour
     private Dictionary<FingerController, bool> fingerPrevState = new Dictionary<FingerController, bool>();
     private bool birdTouched = false;
     private HashSet<Collider2D> touchingHandColliders = new HashSet<Collider2D>();
+    private Transform[] fingerTransforms;
     private Vector3[] previousFingerPositions;
     private Quaternion[] previousFingerRotations;
     private Vector3[] previousFingerScales;
+    private FingerController[] detectedFingerControllers;
+    private bool[] previousFingerGrabStates;
     private float fingerMovementValidUntil = -1f;
-    private float fingerInputValidUntil = -1f;
-    private bool fingerInputPending = false;
-    [SerializeField]HandControllerNew handController;
+    private bool fingerActionPending = false;
 
     // 愤怒移动方向
     private Vector2 moveDirection;
@@ -105,6 +103,8 @@ public class BirdStateController : MonoBehaviour
     private Vector3 tempBirdStartPos;
     // 记录当前裂到第几层，永久不重置，满3层就不再加
     private int currentCrackIndex = 0;
+    // 单独记录完整的啄屏幕攻击次数，不再使用裂纹层数判断失败。
+    private int screenPeckCount = 0;
     // 当前运行的愤怒协程，用于中断
     private Coroutine currentAngryCoroutine;
 
@@ -142,9 +142,9 @@ public class BirdStateController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(petCount);
 
         DetectActualFingerMovement();
-        DetectFingerInput();
 
         switch (currentState)
         {
@@ -235,14 +235,11 @@ public class BirdStateController : MonoBehaviour
     {
         if (!birdTouched) { return; }
 
-        // 必须同时存在一次手指按键和一次真实的手指 Transform 变化。
-        if (handController.thumb.isGrabbing || handController.pointer.isGrabbing || handController.middle.isGrabbing ||
-             handController.ring.isGrabbing || handController.little.isGrabbing)
+        // 不直接读取按键，必须检测到手指控制状态或骨骼实际发生变化。
+        if (fingerActionPending && Time.time <= fingerMovementValidUntil)
         {
-            /*fingerInputPending = false;
-            fingerInputValidUntil = -1f;
+            fingerActionPending = false;
             fingerMovementValidUntil = -1f;
-            */
 
             petCount++;
             Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
@@ -263,14 +260,51 @@ public class BirdStateController : MonoBehaviour
 
     void InitializeFingerTracking()
     {
-        if ((fingerTransforms == null || fingerTransforms.Length == 0) && handRoot != null)
+        if (handRoot != null)
         {
-            FingerController[] controllers = handRoot.GetComponentsInChildren<FingerController>(true);
-            fingerTransforms = new Transform[controllers.Length];
+            detectedFingerControllers =
+                handRoot.GetComponentsInChildren<FingerController>(true);
+            List<Transform> detectedTransforms = new List<Transform>();
+            HashSet<Transform> uniqueTransforms = new HashSet<Transform>();
 
-            for (int i = 0; i < controllers.Length; i++)
+            foreach (FingerController controller in detectedFingerControllers)
             {
-                fingerTransforms[i] = controllers[i].transform;
+                if (controller == null) { continue; }
+
+                // Include the FingerController object and every animated bone
+                // or visual child below it. Local transform comparison means
+                // moving the whole hand with the mouse does not count.
+                Transform[] children =
+                    controller.GetComponentsInChildren<Transform>(true);
+
+                foreach (Transform child in children)
+                {
+                    if (child != null && uniqueTransforms.Add(child))
+                    {
+                        detectedTransforms.Add(child);
+                    }
+                }
+            }
+
+            fingerTransforms = detectedTransforms.ToArray();
+
+            if (fingerTransforms.Length == 0)
+            {
+                Debug.LogWarning("BirdStateController could not find any FingerController objects under Hand Root.");
+            }
+        }
+
+        int controllerCount = detectedFingerControllers == null
+            ? 0
+            : detectedFingerControllers.Length;
+        previousFingerGrabStates = new bool[controllerCount];
+
+        for (int i = 0; i < controllerCount; i++)
+        {
+            if (detectedFingerControllers[i] != null)
+            {
+                previousFingerGrabStates[i] =
+                    detectedFingerControllers[i].isGrabbing;
             }
         }
 
@@ -313,24 +347,30 @@ public class BirdStateController : MonoBehaviour
             previousFingerScales[i] = finger.localScale;
         }
 
+        // Some finger rigs deform their sprite or mesh without changing the
+        // Transform. isGrabbing is the actual finger-action state already
+        // used by HandControllerNew and ComputerTask, so detect its edge too.
+        if (detectedFingerControllers != null)
+        {
+            for (int i = 0; i < detectedFingerControllers.Length; i++)
+            {
+                FingerController controller = detectedFingerControllers[i];
+                if (controller == null) { continue; }
+
+                bool fingerState = controller.isGrabbing;
+                if (fingerState != previousFingerGrabStates[i])
+                {
+                    moved = true;
+                    previousFingerGrabStates[i] = fingerState;
+                }
+            }
+        }
+
         // 只有正在接触尖叫状态的鸟时发生的真实手指动作才有效。
         if (moved && birdTouched && currentState == BirdState.Screaming)
         {
+            fingerActionPending = true;
             fingerMovementValidUntil = Time.time + fingerMovementMemory;
-        }
-    }
-
-    void DetectFingerInput()
-    {
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.T) || Input.GetKeyDown(KeyCode.Space))
-        {
-            fingerInputPending = true;
-            fingerInputValidUntil = Time.time + fingerMovementMemory;
-        }
-
-        if (fingerInputPending && Time.time > fingerInputValidUntil)
-        {
-            fingerInputPending = false;
         }
     }
 
@@ -417,6 +457,7 @@ public class BirdStateController : MonoBehaviour
 
             // 循环啄够时长，最多出3层裂纹
             float peckTimer = 0f;
+            bool countedThisAttack = false;
             while (peckTimer < peckLoopDuration)
             {
                 if (tempAnim != null)
@@ -434,6 +475,28 @@ public class BirdStateController : MonoBehaviour
                                 crackLayers[currentCrackIndex].enabled = true;
                             }
                             currentCrackIndex++;
+                        }
+
+                        // 一次完整的 AngrySequence 无论动画循环多少次，都只算一次啄屏幕。
+                        if (!countedThisAttack)
+                        {
+                            countedThisAttack = true;
+                            screenPeckCount++;
+                            Debug.Log("啄屏幕次数: " + screenPeckCount + "/3");
+
+                            if (screenPeckCount >= 3)
+                            {
+                                if (taskChecklist != null)
+                                {
+                                    taskChecklist.FailGame();
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("Bird pecked the screen three times, but TaskChecklistUI is not assigned.");
+                                }
+
+                                yield break;
+                            }
                         }
                     }
                 }
