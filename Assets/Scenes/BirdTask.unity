@@ -3885,7 +3885,7 @@ MonoBehaviour:
   pointerFingerTip: {fileID: 2092369401}
   pointerFinger: {fileID: 1763580326}
   clickDistance: 0.4
-  typeSfx: {fileID: 0}
+  typeSfx: {fileID: 8300000, guid: 8949915397151c14c8262a1b3623f2aa, type: 3}
   correctColor: {r: 0, g: 1, b: 0, a: 1}
   correctFeedbackDuration: 0.6
   minStep: 3
@@ -6219,6 +6219,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1104518399}
     m_Modifications:
+    - target: {fileID: -272663951062177367, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -272663951062177367, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Pitch
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3742020745520697369, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Controller
       value: 
