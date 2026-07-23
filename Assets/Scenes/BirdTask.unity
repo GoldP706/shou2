@@ -3935,7 +3935,9 @@ MonoBehaviour:
   pointerFingerTip: {fileID: 2092369401}
   pointerFinger: {fileID: 1763580326}
   clickDistance: 0.4
-  typeSfx: {fileID: 8300000, guid: a85722903302674409a4ced1d951885c, type: 3}
+  typeSfx: {fileID: 8300000, guid: 8949915397151c14c8262a1b3623f2aa, type: 3}
+  correctColor: {r: 0, g: 1, b: 0, a: 1}
+  correctFeedbackDuration: 0.6
   minStep: 3
   maxStep: 5
   totalTaskCount: 3
@@ -3952,9 +3954,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: a85722903302674409a4ced1d951885c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8949915397151c14c8262a1b3623f2aa, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.9
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5421,7 +5423,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ec99c44d9b2291144bc22ea703aeaf18, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
