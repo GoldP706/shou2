@@ -956,6 +956,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &201530036
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1312,7 +1314,7 @@ TargetJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_Anchor: {x: 0, y: 0}
-  m_Target: {x: -4.2900033, y: -4.020002}
+  m_Target: {x: -4.291281, y: -4.019716}
   m_AutoConfigureTarget: 1
   m_MaxForce: 100000
   m_DampingRatio: 1
@@ -1951,6 +1953,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &395410732
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3330,6 +3334,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &586329527
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4157,6 +4163,9 @@ MonoBehaviour:
   pointerFingerTip: {fileID: 2092369401}
   pointerFinger: {fileID: 1763580326}
   clickDistance: 0.4
+  typeSfx: {fileID: 0}
+  correctColor: {r: 0, g: 1, b: 0, a: 1}
+  correctFeedbackDuration: 0.6
   minStep: 3
   maxStep: 5
   totalTaskCount: 3
@@ -4776,6 +4785,8 @@ MonoBehaviour:
       m_Calls: []
   pauseGameOnComplete: 1
   victoryDelay: 2
+  audioSource: {fileID: 0}
+  taskCompleteClip: {fileID: 0}
   gameFailureScreen: {fileID: 434448534}
   failureDelay: 1.5
   completedTaskCount: 0
@@ -6055,6 +6066,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &1286692331
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6726,6 +6739,17 @@ MonoBehaviour:
   - {fileID: 631299391}
   - {fileID: 603096758}
   afterImage: {fileID: 1391893548}
+  idleSound: {fileID: 8300000, guid: 3bff74643681542429c56211b0f9d6bb, type: 3}
+  screamSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
+  peckSound: {fileID: 8300000, guid: e53a5fb1851935148ad7038977d19736, type: 3}
+  crackSound: {fileID: 8300000, guid: 5df89f2e2e0332948b5c3d2a23c453e6, type: 3}
+  idleVolume: 1
+  screamStartVolume: 1
+  screamMaxVolume: 1
+  peckVolume: 1
+  crackVolume: 1
+  flyOutFadeDuration: 2
+  fadeEndVolume: 0
   hasCalmedBird: 0
   taskChecklist: {fileID: 957391197}
   taskId: bird
@@ -7219,6 +7243,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &1518244931
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7730,6 +7756,8 @@ MonoBehaviour:
   snapRange: 2
   isFixedSnapped: 0
   permanentlyLocked: 0
+  audioSource: {fileID: 0}
+  hitClip: {fileID: 0}
 --- !u!61 &1693096642
 BoxCollider2D:
   m_ObjectHideFlags: 0
