@@ -36,6 +36,10 @@ public class TaskChecklistUI : MonoBehaviour
     [Tooltip("Seconds to wait after all four tasks complete before showing the victory screen.")]
     [Min(0f)] public float victoryDelay = 2.5f;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip taskCompleteClip;
+
     [Header("Game failure")]
     [Tooltip("A separate full-screen Canvas or Panel shown after the bird pecks the screen three times.")]
     public GameObject gameFailureScreen;
@@ -131,6 +135,12 @@ public class TaskChecklistUI : MonoBehaviour
             }
 
             Debug.Log("Task completed: " + taskId);
+            // 播放完成音效
+            if (audioSource != null && taskCompleteClip != null)
+            {
+                audioSource.PlayOneShot(taskCompleteClip);
+            }
+
             CheckForGameComplete();
             return;
         }

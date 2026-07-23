@@ -18,6 +18,10 @@ public class ComputerTask : MonoBehaviour
 
     public float clickDistance = 0.4f;
 
+    [Header("敲键盘音效")]
+    public AudioClip typeSfx;
+    private AudioSource audioSource;
+
     [Header("Task")]
     public int minStep = 3;
     public int maxStep = 5;
@@ -47,6 +51,8 @@ public class ComputerTask : MonoBehaviour
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         keyPointer.gameObject.SetActive(false);
 
         StartCoroutine(Cooldown());
@@ -90,7 +96,15 @@ public class ComputerTask : MonoBehaviour
 
         if (distance <= clickDistance)
         {
+            // 只有敲对了才播放音效
+            if (audioSource != null && typeSfx != null)
+            {
+                audioSource.PlayOneShot(typeSfx);
+            }
+
             CorrectClick();
+
+
         }
     }
 
