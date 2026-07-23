@@ -1180,7 +1180,7 @@ TargetJoint2D:
   m_BreakTorque: Infinity
   m_BreakAction: 3
   m_Anchor: {x: 0, y: 0}
-  m_Target: {x: -4.2870374, y: -4.0092597}
+  m_Target: {x: -4.2883143, y: -4.0104537}
   m_AutoConfigureTarget: 1
   m_MaxForce: 100000
   m_DampingRatio: 1
@@ -3334,7 +3334,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 22c0ed890e2e64b9c9ff1bc1e5e82687, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.7
+  m_Volume: 0.205
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5785,6 +5785,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1104518399}
     m_Modifications:
+    - target: {fileID: -272663951062177367, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -272663951062177367, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
+      propertyPath: m_Pitch
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3742020745520697369, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Controller
       value: 
@@ -5807,7 +5815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6298304032139691435, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_Target.y
-      value: 1.52
+      value: 1.5199995
       objectReference: {fileID: 0}
     - target: {fileID: 6298304032139691435, guid: 871ff2d509ab645d4b78385095f2ba70, type: 3}
       propertyPath: m_AutoConfigureTarget
@@ -5968,6 +5976,13 @@ MonoBehaviour:
   - {fileID: 631299391}
   - {fileID: 603096758}
   afterImage: {fileID: 1391893548}
+  idleSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
+  screamSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
+  peckSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
+  idleVolume: 0.1
+  screamStartVolume: 0.5
+  screamMaxVolume: 1
+  peckVolume: 1
   hasCalmedBird: 0
   taskChecklist: {fileID: 957391197}
   taskId: bird

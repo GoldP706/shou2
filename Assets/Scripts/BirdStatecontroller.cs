@@ -49,6 +49,26 @@ public class BirdStateController : MonoBehaviour
     [Header("引用")]
     [Tooltip("残影脚本引用")]
     public AfterImageEffect afterImage;
+
+    // ====================== 新增：全暴露音效参数，Inspector直接调 ======================
+    [Header("音效设置（可随时替换素材/调音量）")]
+    [Tooltip("待机状态循环音效")]
+    public AudioClip idleSound;
+    [Tooltip("尖叫状态循环音效")]
+    public AudioClip screamSound;
+    [Tooltip("啄屏幕状态循环音效")]
+    public AudioClip peckSound;
+    [Tooltip("待机状态音量")]
+    [Range(0f, 1f)] public float idleVolume = 0.2f;
+    [Tooltip("尖叫刚开始的音量")]
+    [Range(0f, 1f)] public float screamStartVolume = 0.3f;
+    [Tooltip("尖叫结束/飞出屏幕时的最大音量")]
+    [Range(0f, 1f)] public float screamMaxVolume = 0.9f;
+    [Tooltip("啄屏幕状态音量")]
+    [Range(0f, 1f)] public float peckVolume = 1f;
+    private AudioSource _audio;
+    // ==============================================================================
+
     // 任务状态标记，默认false，安抚成功后永久为true
     [Header("任务状态")]
     [Tooltip("玩家是否成功通过抚摸安抚过鸟（任务完成标记）")]
@@ -100,6 +120,14 @@ public class BirdStateController : MonoBehaviour
         col = GetComponent<Collider2D>();
         startPosition = transform.position;
         originalScale = transform.localScale;
+
+        // ====================== 新增：自动初始化音频组件 ======================
+        _audio = GetComponent<AudioSource>();
+        if (_audio == null) _audio = gameObject.AddComponent<AudioSource>();
+        _audio.playOnAwake = false;
+        _audio.loop = true;
+        // ==================================================================
+
         InitializeFingerTracking();
         // 缓存临时鸟初始位置，默认隐藏
         if (tempBird != null)
@@ -139,6 +167,33 @@ public class BirdStateController : MonoBehaviour
                 break;
         }
     }
+
+    // ====================== 新增：通用音效切换方法，避免重复代码 ======================
+    void SwitchSound(AudioClip clip, float volume)
+    {
+        if (_audio == null) return;
+        // 空clip就直接停音
+        if (clip == null)
+        {
+            _audio.Stop();
+            return;
+        }
+        // 换clip/音量重新播
+        if (_audio.clip != clip)
+        {
+            _audio.Stop();
+            _audio.clip = clip;
+            _audio.volume = volume;
+            _audio.Play();
+        }
+        else
+        {
+            // 同一个clip只调音量
+            _audio.volume = volume;
+        }
+    }
+    // ==========================================================================
+
     // ========== 待机状态 ==========
     void EnterIdle()
     {
@@ -169,6 +224,10 @@ public class BirdStateController : MonoBehaviour
         idleTimer = Random.Range(minIdleTime, maxIdleTime);
         anim.Play("BirdResting");
         if (afterImage != null) afterImage.enabled = false;
+
+        // ====================== 新增：切待机音效 ======================
+        SwitchSound(idleSound, idleVolume);
+        // ========================================================
     }
     void UpdateIdle()
     {
@@ -186,10 +245,24 @@ public class BirdStateController : MonoBehaviour
         petCount = 0;
         fingerPrevState.Clear();
         anim.Play("BirdAngry");
+
+        // ====================== 新增：切尖叫初始音效 ======================
+        SwitchSound(screamSound, screamStartVolume);
+        // ========================================================
     }
     void UpdateScreaming()
     {
         stateTimer -= Time.deltaTime;
+
+        // ====================== 新增：尖叫阶段音量线性渐增 ======================
+        if (_audio != null && _audio.clip == screamSound)
+        {
+            // 进度0=刚进尖叫，1=尖叫结束，音量从StartVolume线性涨到MaxVolume
+            float screamProgress = 1f - (stateTimer / screamDuration);
+            _audio.volume = Mathf.Lerp(screamStartVolume, screamMaxVolume, screamProgress);
+        }
+        // ==================================================================
+
         // 超时 → 愤怒
         if (stateTimer <= 0)
         {
@@ -344,6 +417,9 @@ public class BirdStateController : MonoBehaviour
     IEnumerator AngrySequence()
     {
         currentState = BirdState.Angry;
+        // 刚进愤怒保持尖叫最大音量，不用切音效
+        SwitchSound(screamSound, screamMaxVolume);
+
         // 1. 红温闪烁 + 压缩
         yield return StartCoroutine(FlashRedAndShrink());
         // 2. 锁定原鸟在愤怒帧
@@ -366,6 +442,11 @@ public class BirdStateController : MonoBehaviour
         // 4. 延迟等待啄屏幕
         yield return new WaitForSeconds(peckDelay);
         Debug.Log("=== 开始播放啄屏幕动画 ===");
+
+        // ====================== 新增：切啄屏幕音效 ======================
+        SwitchSound(peckSound, peckVolume);
+        // ========================================================
+
         // 激活临时鸟
         if (tempBird != null)
         {
@@ -418,6 +499,8 @@ public class BirdStateController : MonoBehaviour
                                 {
                                     Debug.LogWarning("Bird pecked the screen three times, but TaskChecklistUI is not assigned.");
                                 }
+                                // 失败也停音效
+                                _audio?.Stop();
                                 yield break;
                             }
                         }
@@ -426,6 +509,11 @@ public class BirdStateController : MonoBehaviour
                 peckTimer += Time.deltaTime;
                 yield return null;
             }
+
+            // ====================== 新增：啄完进入空窗期，停音效 ======================
+            _audio?.Stop();
+            // ==================================================================
+
             // 固定往左边飞出去
             float flyTimer = 0f;
             while (flyTimer < 2f)
@@ -438,9 +526,9 @@ public class BirdStateController : MonoBehaviour
             tempBird.SetActive(false);
             tempBird.transform.position = tempBirdStartPos;
         }
-        // 等2秒再让原鸟回原点
+        // 等2秒再让原鸟回原点（空窗期全程静音）
         yield return new WaitForSeconds(birdReturnDelay);
-        // 原鸟归位
+        // 原鸟归位（EnterIdle里会自动切回待机音效）
         currentAngryCoroutine = null;
         EnterIdle();
     }
