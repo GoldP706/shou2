@@ -30,6 +30,9 @@ public class TetrisSnap2D : MonoBehaviour
     private RigidbodyConstraints2D originalConstraints;
     [SerializeField] private bool isFixedSnapped;
     [SerializeField] private bool permanentlyLocked;
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip hitClip;
 
     public bool IsFixedSnapped => isFixedSnapped;
 
@@ -174,6 +177,11 @@ public class TetrisSnap2D : MonoBehaviour
         body.velocity = Vector2.zero;
         body.angularVelocity = 0f;
         UpdateJointTarget(targetPosition);
+
+        if (audioSource != null && hitClip != null)
+        {
+            audioSource.PlayOneShot(hitClip);
+        }
 
         if (!lockAfterFixedSnap)
         {

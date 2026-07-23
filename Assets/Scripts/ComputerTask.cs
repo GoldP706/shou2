@@ -22,6 +22,13 @@ public class ComputerTask : MonoBehaviour
     public AudioClip typeSfx;
     private AudioSource audioSource;
 
+    [Header("点击成功视觉反馈")]
+    public Color correctColor = Color.green;
+    public float correctFeedbackDuration = 0.6f;
+    private SpriteRenderer keyPointerRenderer;
+    private Color keyPointerOriginalColor;
+
+
     [Header("Task")]
     public int minStep = 3;
     public int maxStep = 5;
@@ -52,6 +59,9 @@ public class ComputerTask : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        keyPointerRenderer = keyPointer.GetComponent<SpriteRenderer>();
+        keyPointerOriginalColor = keyPointerRenderer.color;
 
         keyPointer.gameObject.SetActive(false);
 
@@ -112,6 +122,22 @@ public class ComputerTask : MonoBehaviour
     {
         currentStep++;
 
+        // 暂停点击检测，进入“变绿 -> 停留 -> 换位置/结束”的反馈流程
+        taskRunning = false;
+
+        StartCoroutine(CorrectClickFeedback());
+    }
+
+    IEnumerator CorrectClickFeedback()
+    {
+        // 变绿，原地停留提示玩家刚才点对了
+        keyPointerRenderer.color = correctColor;
+
+        yield return new WaitForSeconds(correctFeedbackDuration);
+
+        // 恢复原色
+        keyPointerRenderer.color = keyPointerOriginalColor;
+
         if (currentStep >= targetStep)
         {
             FinishTask();
@@ -119,6 +145,11 @@ public class ComputerTask : MonoBehaviour
         else
         {
             MovePointer();
+
+            taskRunning = true;
+
+            // 重新开始接受点击前，重置边缘检测，避免玩家在停留期间一直按住导致误触发
+            wasGrabbingLastFrame = pointerFinger.isGrabbing;
         }
     }
 
@@ -131,6 +162,8 @@ public class ComputerTask : MonoBehaviour
         targetStep = Random.Range(minStep, maxStep + 1);
 
         keyPointer.gameObject.SetActive(true);
+
+        keyPointerRenderer.color = keyPointerOriginalColor;
 
         MovePointer();
 
