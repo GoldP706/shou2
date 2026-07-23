@@ -84,8 +84,8 @@ public class HandControllerNew : MonoBehaviour
             closestObj = FindClosestNearbyObject();
         }
         
-        //elbow movement
-        if(Input.GetKeyDown(KeyCode.Mouse1)){
+        //elbow movement (removed)
+        /*if(Input.GetKeyDown(KeyCode.Mouse1)){
             mouseFollow.enabled = false;
             gameObject.transform.position = new Vector3(gameObject.transform.position.x+1, gameObject.transform.position.y-0.5f, 0f);
 
@@ -93,7 +93,7 @@ public class HandControllerNew : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.Mouse1)){
             mouseFollow.enabled = true;
             gameObject.transform.position = new Vector3(gameObject.transform.position.x-1, gameObject.transform.position.y+0.5f, 0f);
-        }
+        }*/
     }
 
     private void UpdateHandState()
