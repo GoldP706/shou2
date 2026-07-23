@@ -11,6 +11,15 @@ public class StartScreenController : MonoBehaviour
     [Tooltip("The Canvas or Panel that contains the start-page image and buttons. Leave empty when this script is attached directly to that object.")]
     public GameObject startScreen;
 
+    [Tooltip("The new first cover page containing the clickable Start button.")]
+    public GameObject coverPage;
+
+    [Tooltip("The second page containing the hand instructions and draggable Start block.")]
+    public GameObject instructionPage;
+
+    [Tooltip("Show the gameplay hand on the first cover page. Usually leave this off and show it only on the instruction page.")]
+    public bool showHandOnCover = false;
+
     [Tooltip("Pause gameplay while the start page is visible.")]
     public bool pauseOnStart = false;
 
@@ -39,7 +48,11 @@ public class StartScreenController : MonoBehaviour
     [Min(0.01f)] public float fadeToBlackDuration = 0.6f;
     [Min(0.01f)] public float fadeFromBlackDuration = 0.6f;
 
+    [Tooltip("Fade duration used when switching from the cover page to the instruction page.")]
+    [Min(0.01f)] public float coverToInstructionFadeDuration = 0.45f;
+
     private bool transitionStarted;
+    private bool pageTransitionRunning;
     private bool skippedForRestart;
 
     public static void SkipStartScreenOnNextLoad()
@@ -73,6 +86,11 @@ public class StartScreenController : MonoBehaviour
                 gameplayRoot.SetActive(true);
             }
 
+            if (handRoot != null)
+            {
+                handRoot.gameObject.SetActive(true);
+            }
+
             SetGameplayScriptsEnabled(true);
             Time.timeScale = 1f;
             startScreen.SetActive(false);
@@ -80,6 +98,21 @@ public class StartScreenController : MonoBehaviour
         }
 
         startScreen.SetActive(true);
+
+        if (coverPage != null)
+        {
+            coverPage.SetActive(true);
+        }
+
+        if (instructionPage != null)
+        {
+            instructionPage.SetActive(false);
+        }
+
+        if (handRoot != null && instructionPage != null)
+        {
+            handRoot.gameObject.SetActive(showHandOnCover);
+        }
 
         if (gameplayRoot != null)
         {
@@ -119,6 +152,58 @@ public class StartScreenController : MonoBehaviour
         }
     }
 
+    public void ShowInstructionPage()
+    {
+        if (!pageTransitionRunning)
+        {
+            pageTransitionRunning = true;
+            StartCoroutine(ShowInstructionPageTransition());
+        }
+    }
+
+    private System.Collections.IEnumerator ShowInstructionPageTransition()
+    {
+        if (blackFade != null)
+        {
+            blackFade.gameObject.SetActive(true);
+            blackFade.blocksRaycasts = true;
+            yield return FadeBlack(
+                0f,
+                1f,
+                coverToInstructionFadeDuration);
+        }
+
+        // Switch pages only while the screen is fully black.
+        if (coverPage != null)
+        {
+            coverPage.SetActive(false);
+        }
+
+        if (instructionPage != null)
+        {
+            instructionPage.SetActive(true);
+        }
+
+        if (handRoot != null)
+        {
+            handRoot.gameObject.SetActive(true);
+        }
+
+        if (blackFade != null)
+        {
+            yield return FadeBlack(
+                1f,
+                0f,
+                coverToInstructionFadeDuration);
+            blackFade.blocksRaycasts = false;
+            blackFade.gameObject.SetActive(false);
+        }
+
+        pageTransitionRunning = false;
+    }
+
+public GameObject canvasHint;
+
     private System.Collections.IEnumerator StartGameTransition()
     {
         yield return new WaitForSecondsRealtime(snappedHoldDuration);
@@ -139,7 +224,7 @@ public class StartScreenController : MonoBehaviour
         {
             startCanvas.enabled = false;
         }
-
+//canvasHint.SetActive(true);
         if (gameplayRoot != null)
         {
             gameplayRoot.SetActive(true);

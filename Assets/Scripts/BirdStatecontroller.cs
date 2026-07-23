@@ -135,14 +135,13 @@ public class BirdStateController : MonoBehaviour
                 if (crack != null) crack.enabled = false;
             }
         }
-
         // 初始待机状态
         EnterIdle();
     }
 
     void Update()
     {
-        Debug.Log(petCount);
+        //sDebug.Log(petCount);
 
         DetectActualFingerMovement();
 
