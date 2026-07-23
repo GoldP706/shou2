@@ -223,6 +223,7 @@ public class TaskChecklistUI : MonoBehaviour
             gameCompleteScreen.SetActive(true);
             bgm.clip = winAudio;
             bgm.loop = false;
+            bgm.Play();
         }
 
         onAllTasksCompleted?.Invoke();
@@ -265,6 +266,7 @@ public class TaskChecklistUI : MonoBehaviour
             gameFailureScreen.SetActive(true);
             bgm.clip = loseAudio;
             bgm.loop = false;
+            bgm.Play();
         }
         else
         {
