@@ -14,11 +14,11 @@ public class HandControllerNew : MonoBehaviour
     private bool stateSwitched = false;
 
     [SerializeField] MouseFollowRandomDrift mouseFollow;
-    [SerializeField] FingerController thumb;
-    [SerializeField] FingerController pointer;
-    [SerializeField] FingerController middle;
-    [SerializeField] FingerController ring;
-    [SerializeField] FingerController little;
+    [SerializeField] public FingerController thumb;
+    [SerializeField] public FingerController pointer;
+    [SerializeField] public FingerController middle;
+    [SerializeField] public FingerController ring;
+    [SerializeField] public FingerController little;
 
     private float handHeight = 1f;
 
@@ -82,6 +82,17 @@ public class HandControllerNew : MonoBehaviour
         {
             ReleaseHeldObject();
             closestObj = FindClosestNearbyObject();
+        }
+        
+        //elbow movement
+        if(Input.GetKeyDown(KeyCode.Mouse1)){
+            mouseFollow.enabled = false;
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x+1, gameObject.transform.position.y-0.5f, 0f);
+
+        }
+        if(Input.GetKeyUp(KeyCode.Mouse1)){
+            mouseFollow.enabled = true;
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x-1, gameObject.transform.position.y+0.5f, 0f);
         }
     }
 
