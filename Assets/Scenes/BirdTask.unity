@@ -6471,13 +6471,17 @@ MonoBehaviour:
   - {fileID: 631299391}
   - {fileID: 603096758}
   afterImage: {fileID: 1391893548}
-  idleSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
+  idleSound: {fileID: 8300000, guid: 3bff74643681542429c56211b0f9d6bb, type: 3}
   screamSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
-  peckSound: {fileID: 8300000, guid: efb23ce9a68e6f84292d83715036efc9, type: 3}
-  idleVolume: 0.1
+  peckSound: {fileID: 8300000, guid: e53a5fb1851935148ad7038977d19736, type: 3}
+  crackSound: {fileID: 8300000, guid: a9628f2b0e4f9455bab45c23d9e88c1f, type: 3}
+  idleVolume: 1
   screamStartVolume: 0.5
   screamMaxVolume: 1
   peckVolume: 1
+  crackVolume: 1
+  flyOutFadeDuration: 2
+  fadeEndVolume: 0
   hasCalmedBird: 0
   taskChecklist: {fileID: 957391197}
   taskId: bird

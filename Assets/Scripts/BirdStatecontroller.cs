@@ -50,14 +50,17 @@ public class BirdStateController : MonoBehaviour
     [Tooltip("残影脚本引用")]
     public AfterImageEffect afterImage;
 
-    // ====================== 新增：全暴露音效参数，Inspector直接调 ======================
-    [Header("音效设置（可随时替换素材/调音量）")]
+    // ====================== 音效设置（全Inspector可调）======================
+    [Header("音效设置")]
     [Tooltip("待机状态循环音效")]
     public AudioClip idleSound;
     [Tooltip("尖叫状态循环音效")]
     public AudioClip screamSound;
     [Tooltip("啄屏幕状态循环音效")]
     public AudioClip peckSound;
+    [Tooltip("屏幕碎裂单次音效（每次出裂纹都会触发）")]
+    public AudioClip crackSound;
+
     [Tooltip("待机状态音量")]
     [Range(0f, 1f)] public float idleVolume = 0.2f;
     [Tooltip("尖叫刚开始的音量")]
@@ -66,9 +69,18 @@ public class BirdStateController : MonoBehaviour
     [Range(0f, 1f)] public float screamMaxVolume = 0.9f;
     [Tooltip("啄屏幕状态音量")]
     [Range(0f, 1f)] public float peckVolume = 1f;
-    private AudioSource _audio;
-    // ==============================================================================
+    [Tooltip("碎裂音效音量")]
+    [Range(0f, 1f)] public float crackVolume = 1f;
 
+    [Header("愤怒飞出音效设置")]
+    [Tooltip("鸟飞出屏幕后，音量淡出总时长（秒）")]
+    public float flyOutFadeDuration = 2f;
+    [Tooltip("淡出结束后最终音量（0=完全静音）")]
+    [Range(0f, 1f)] public float fadeEndVolume = 0f;
+    // ==================================================================
+
+    private AudioSource _audio;
+    private Coroutine _activeFadeCoroutine;
     // 任务状态标记，默认false，安抚成功后永久为true
     [Header("任务状态")]
     [Tooltip("玩家是否成功通过抚摸安抚过鸟（任务完成标记）")]
@@ -108,7 +120,7 @@ public class BirdStateController : MonoBehaviour
     private Vector3 tempBirdStartPos;
     // 记录当前裂到第几层，永久不重置，满3层就不再加
     private int currentCrackIndex = 0;
-    // 单独记录完整的啄屏幕攻击次数，不再使用裂纹层数判断失败。
+    // 单独记录完整的啄屏幕攻击次数
     private int screenPeckCount = 0;
     // 当前运行的愤怒协程，用于中断
     private Coroutine currentAngryCoroutine;
@@ -121,12 +133,11 @@ public class BirdStateController : MonoBehaviour
         startPosition = transform.position;
         originalScale = transform.localScale;
 
-        // ====================== 新增：自动初始化音频组件 ======================
+        // 自动初始化音频组件
         _audio = GetComponent<AudioSource>();
         if (_audio == null) _audio = gameObject.AddComponent<AudioSource>();
         _audio.playOnAwake = false;
         _audio.loop = true;
-        // ==================================================================
 
         InitializeFingerTracking();
         // 缓存临时鸟初始位置，默认隐藏
@@ -135,7 +146,7 @@ public class BirdStateController : MonoBehaviour
             tempBirdStartPos = tempBird.transform.position;
             tempBird.SetActive(false);
         }
-        // 初始状态所有裂纹隐藏（仅游戏开始时隐藏一次，之后永久显示）
+        // 初始状态所有裂纹隐藏
         if (crackLayers != null)
         {
             foreach (var crack in crackLayers)
@@ -148,7 +159,6 @@ public class BirdStateController : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log(petCount);
         DetectActualFingerMovement();
         switch (currentState)
         {
@@ -156,7 +166,6 @@ public class BirdStateController : MonoBehaviour
                 UpdateIdle();
                 break;
             case BirdState.Screaming:
-                // 输入检测放在 Update 中，避免 OnTriggerStay2D 漏掉 GetKeyDown。
                 UpdatePetting();
                 if (currentState == BirdState.Screaming)
                 {
@@ -168,17 +177,22 @@ public class BirdStateController : MonoBehaviour
         }
     }
 
-    // ====================== 新增：通用音效切换方法，避免重复代码 ======================
+    // 通用音效切换
     void SwitchSound(AudioClip clip, float volume)
     {
+        // 切换音效时停止正在运行的淡出，避免冲突
+        if (_activeFadeCoroutine != null)
+        {
+            StopCoroutine(_activeFadeCoroutine);
+            _activeFadeCoroutine = null;
+        }
+
         if (_audio == null) return;
-        // 空clip就直接停音
         if (clip == null)
         {
             _audio.Stop();
             return;
         }
-        // 换clip/音量重新播
         if (_audio.clip != clip)
         {
             _audio.Stop();
@@ -188,11 +202,26 @@ public class BirdStateController : MonoBehaviour
         }
         else
         {
-            // 同一个clip只调音量
             _audio.volume = volume;
+            if (!_audio.isPlaying) _audio.Play();
         }
     }
-    // ==========================================================================
+
+    // 平滑音量淡出协程
+    IEnumerator FadeOutSound(float startVolume, float targetVolume, float duration)
+    {
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float progress = Mathf.Clamp01(timer / duration);
+            _audio.volume = Mathf.Lerp(startVolume, targetVolume, progress);
+            yield return null;
+        }
+        _audio.volume = targetVolume;
+        if (Mathf.Approximately(targetVolume, 0f)) _audio.Stop();
+        _activeFadeCoroutine = null;
+    }
 
     // ========== 待机状态 ==========
     void EnterIdle()
@@ -202,13 +231,13 @@ public class BirdStateController : MonoBehaviour
         transform.localScale = originalScale;
         spr.color = Color.white;
         petCount = 0;
-        // 中断所有正在运行的愤怒协程，避免穿帮
+        // 中断所有正在运行的愤怒协程
         if (currentAngryCoroutine != null)
         {
             StopCoroutine(currentAngryCoroutine);
             currentAngryCoroutine = null;
         }
-        // 隐藏临时鸟，防止残留
+        // 隐藏临时鸟
         if (tempBird != null)
         {
             tempBird.SetActive(false);
@@ -218,24 +247,17 @@ public class BirdStateController : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         col.enabled = true;
         rb.velocity = Vector2.zero;
-        // 重置动画速度
         anim.speed = 1;
-        // 随机待机时间，自动等待下一轮
         idleTimer = Random.Range(minIdleTime, maxIdleTime);
         anim.Play("BirdResting");
         if (afterImage != null) afterImage.enabled = false;
 
-        // ====================== 新增：切待机音效 ======================
         SwitchSound(idleSound, idleVolume);
-        // ========================================================
     }
     void UpdateIdle()
     {
         idleTimer -= Time.deltaTime;
-        if (idleTimer <= 0)
-        {
-            EnterScreaming();
-        }
+        if (idleTimer <= 0) EnterScreaming();
     }
     // ========== 尖叫状态 ==========
     void EnterScreaming()
@@ -245,47 +267,31 @@ public class BirdStateController : MonoBehaviour
         petCount = 0;
         fingerPrevState.Clear();
         anim.Play("BirdAngry");
-
-        // ====================== 新增：切尖叫初始音效 ======================
         SwitchSound(screamSound, screamStartVolume);
-        // ========================================================
     }
     void UpdateScreaming()
     {
         stateTimer -= Time.deltaTime;
-
-        // ====================== 新增：尖叫阶段音量线性渐增 ======================
+        // 尖叫阶段音量线性渐增
         if (_audio != null && _audio.clip == screamSound)
         {
-            // 进度0=刚进尖叫，1=尖叫结束，音量从StartVolume线性涨到MaxVolume
             float screamProgress = 1f - (stateTimer / screamDuration);
             _audio.volume = Mathf.Lerp(screamStartVolume, screamMaxVolume, screamProgress);
         }
-        // ==================================================================
-
-        // 超时 → 愤怒
-        if (stateTimer <= 0)
-        {
-            currentAngryCoroutine = StartCoroutine(AngrySequence());
-        }
+        if (stateTimer <= 0) currentAngryCoroutine = StartCoroutine(AngrySequence());
     }
     void UpdatePetting()
     {
-        if (!birdTouched) { return; }
-        // 不直接读取按键，必须检测到手指控制状态或骨骼实际发生变化。
+        if (!birdTouched) return;
         if (fingerActionPending && Time.time <= fingerMovementValidUntil)
         {
             fingerActionPending = false;
             fingerMovementValidUntil = -1f;
             petCount++;
-            Debug.Log("抚摸次数: " + petCount + "/" + requiredPets);
             if (petCount >= requiredPets)
             {
                 hasCalmedBird = true;
-                if (taskChecklist != null)
-                {
-                    taskChecklist.CompleteTask(taskId);
-                }
+                if (taskChecklist != null) taskChecklist.CompleteTask(taskId);
                 EnterIdle();
             }
         }
@@ -294,43 +300,25 @@ public class BirdStateController : MonoBehaviour
     {
         if (handRoot != null)
         {
-            detectedFingerControllers =
-                handRoot.GetComponentsInChildren<FingerController>(true);
+            detectedFingerControllers = handRoot.GetComponentsInChildren<FingerController>(true);
             List<Transform> detectedTransforms = new List<Transform>();
             HashSet<Transform> uniqueTransforms = new HashSet<Transform>();
             foreach (FingerController controller in detectedFingerControllers)
             {
-                if (controller == null) { continue; }
-                // Include the FingerController object and every animated bone
-                // or visual child below it. Local transform comparison means
-                // moving the whole hand with the mouse does not count.
-                Transform[] children =
-                    controller.GetComponentsInChildren<Transform>(true);
+                if (controller == null) continue;
+                Transform[] children = controller.GetComponentsInChildren<Transform>(true);
                 foreach (Transform child in children)
                 {
-                    if (child != null && uniqueTransforms.Add(child))
-                    {
-                        detectedTransforms.Add(child);
-                    }
+                    if (child != null && uniqueTransforms.Add(child)) detectedTransforms.Add(child);
                 }
             }
             fingerTransforms = detectedTransforms.ToArray();
-            if (fingerTransforms.Length == 0)
-            {
-                Debug.LogWarning("BirdStateController could not find any FingerController objects under Hand Root.");
-            }
         }
-        int controllerCount = detectedFingerControllers == null
-            ? 0
-            : detectedFingerControllers.Length;
+        int controllerCount = detectedFingerControllers == null ? 0 : detectedFingerControllers.Length;
         previousFingerGrabStates = new bool[controllerCount];
         for (int i = 0; i < controllerCount; i++)
         {
-            if (detectedFingerControllers[i] != null)
-            {
-                previousFingerGrabStates[i] =
-                    detectedFingerControllers[i].isGrabbing;
-            }
+            if (detectedFingerControllers[i] != null) previousFingerGrabStates[i] = detectedFingerControllers[i].isGrabbing;
         }
         int count = fingerTransforms == null ? 0 : fingerTransforms.Length;
         previousFingerPositions = new Vector3[count];
@@ -339,7 +327,7 @@ public class BirdStateController : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Transform finger = fingerTransforms[i];
-            if (finger == null) { continue; }
+            if (finger == null) continue;
             previousFingerPositions[i] = finger.localPosition;
             previousFingerRotations[i] = finger.localRotation;
             previousFingerScales[i] = finger.localScale;
@@ -347,31 +335,25 @@ public class BirdStateController : MonoBehaviour
     }
     void DetectActualFingerMovement()
     {
-        if (fingerTransforms == null) { return; }
+        if (fingerTransforms == null) return;
         bool moved = false;
         for (int i = 0; i < fingerTransforms.Length; i++)
         {
             Transform finger = fingerTransforms[i];
-            if (finger == null) { continue; }
+            if (finger == null) continue;
             if (Vector3.Distance(finger.localPosition, previousFingerPositions[i]) > fingerPositionThreshold ||
                 Quaternion.Angle(finger.localRotation, previousFingerRotations[i]) > fingerRotationThreshold ||
-                Vector3.Distance(finger.localScale, previousFingerScales[i]) > fingerPositionThreshold)
-            {
-                moved = true;
-            }
+                Vector3.Distance(finger.localScale, previousFingerScales[i]) > fingerPositionThreshold) moved = true;
             previousFingerPositions[i] = finger.localPosition;
             previousFingerRotations[i] = finger.localRotation;
             previousFingerScales[i] = finger.localScale;
         }
-        // Some finger rigs deform their sprite or mesh without changing the
-        // Transform. isGrabbing is the actual finger-action state already
-        // used by HandControllerNew and ComputerTask, so detect its edge too.
         if (detectedFingerControllers != null)
         {
             for (int i = 0; i < detectedFingerControllers.Length; i++)
             {
                 FingerController controller = detectedFingerControllers[i];
-                if (controller == null) { continue; }
+                if (controller == null) continue;
                 bool fingerState = controller.isGrabbing;
                 if (fingerState != previousFingerGrabStates[i])
                 {
@@ -380,18 +362,15 @@ public class BirdStateController : MonoBehaviour
                 }
             }
         }
-        // 只有正在接触尖叫状态的鸟时发生的真实手指动作才有效。
         if (moved && birdTouched && currentState == BirdState.Screaming)
         {
             fingerActionPending = true;
             fingerMovementValidUntil = Time.time + fingerMovementMemory;
         }
     }
-    // 检测抚摸（手指弯曲上升沿）
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("bird");
-        if (!IsHandCollider(other)) { return; }
+        if (!IsHandCollider(other)) return;
         touchingHandColliders.Add(other);
         birdTouched = touchingHandColliders.Count > 0;
     }
@@ -400,24 +379,17 @@ public class BirdStateController : MonoBehaviour
         touchingHandColliders.Remove(other);
         birdTouched = touchingHandColliders.Count > 0;
         FingerController finger = other.GetComponent<FingerController>();
-        if (finger != null && fingerPrevState.ContainsKey(finger))
-        {
-            fingerPrevState.Remove(finger);
-        }
+        if (finger != null && fingerPrevState.ContainsKey(finger)) fingerPrevState.Remove(finger);
     }
     bool IsHandCollider(Collider2D other)
     {
-        if (handRoot == null)
-        {
-            return true;
-        }
+        if (handRoot == null) return true;
         return other.transform == handRoot || other.transform.IsChildOf(handRoot);
     }
     // ========== 愤怒状态协程 ==========
     IEnumerator AngrySequence()
     {
         currentState = BirdState.Angry;
-        // 刚进愤怒保持尖叫最大音量，不用切音效
         SwitchSound(screamSound, screamMaxVolume);
 
         // 1. 红温闪烁 + 压缩
@@ -425,11 +397,16 @@ public class BirdStateController : MonoBehaviour
         // 2. 锁定原鸟在愤怒帧
         anim.Play("BirdAngry", 0, 0);
         anim.speed = 0;
-        // 3. 原鸟随机方向飞出屏幕
+        // 3. 原鸟开始飞出屏幕 → 启动音量淡出
         moveDirection = Random.value > 0.5f ? Vector2.right : Vector2.left;
         rb.bodyType = RigidbodyType2D.Kinematic;
         col.enabled = false;
         if (afterImage != null) afterImage.enabled = true;
+
+        // 启动平滑淡出：从当前最大音量，按设置时长淡出到目标音量
+        if (_activeFadeCoroutine != null) StopCoroutine(_activeFadeCoroutine);
+        _activeFadeCoroutine = StartCoroutine(FadeOutSound(screamMaxVolume, fadeEndVolume, flyOutFadeDuration));
+
         float moveTimer = 0f;
         while (moveTimer < 2f)
         {
@@ -441,11 +418,9 @@ public class BirdStateController : MonoBehaviour
         if (afterImage != null) afterImage.enabled = false;
         // 4. 延迟等待啄屏幕
         yield return new WaitForSeconds(peckDelay);
-        Debug.Log("=== 开始播放啄屏幕动画 ===");
 
-        // ====================== 新增：切啄屏幕音效 ======================
+        // 切啄屏幕循环音效
         SwitchSound(peckSound, peckVolume);
-        // ========================================================
 
         // 激活临时鸟
         if (tempBird != null)
@@ -459,7 +434,6 @@ public class BirdStateController : MonoBehaviour
                 tempAnim.speed = 1;
                 tempAnim.Play("BirdPeck", 0, 0);
             }
-            // 循环啄够时长，每次红温只出1层裂纹
             float peckTimer = 0f;
             bool countedThisAttack = false;
             while (peckTimer < peckLoopDuration)
@@ -467,12 +441,9 @@ public class BirdStateController : MonoBehaviour
                 if (tempAnim != null)
                 {
                     AnimatorStateInfo stateInfo = tempAnim.GetCurrentAnimatorStateInfo(0);
-                    // 动画播到90%=鸟嘴碰到屏幕
                     if (stateInfo.normalizedTime >= 0.9f && stateInfo.IsName("BirdPeck"))
                     {
                         tempAnim.Play("BirdPeck", 0, 0);
-
-                        // 一次完整的红温攻击，无论啄多少次，只算1次、只亮1层裂纹
                         if (!countedThisAttack)
                         {
                             countedThisAttack = true;
@@ -482,24 +453,16 @@ public class BirdStateController : MonoBehaviour
                                 if (crackLayers[currentCrackIndex] != null)
                                 {
                                     crackLayers[currentCrackIndex].enabled = true;
+                                    // ====================== 每次出裂纹/碎裂都触发音效 ======================
+                                    if (crackSound != null) _audio.PlayOneShot(crackSound, crackVolume);
+                                    // ==================================================================
                                 }
-                                Debug.Log($"裂纹层数: {currentCrackIndex + 1}/{MAX_CRACK_LAYERS}");
                                 currentCrackIndex++;
                             }
-                            // 啄击计数+1
                             screenPeckCount++;
-                            Debug.Log("啄屏幕次数: " + screenPeckCount + "/3");
                             if (screenPeckCount >= 3)
                             {
-                                if (taskChecklist != null)
-                                {
-                                    taskChecklist.FailGame();
-                                }
-                                else
-                                {
-                                    Debug.LogWarning("Bird pecked the screen three times, but TaskChecklistUI is not assigned.");
-                                }
-                                // 失败也停音效
+                                if (taskChecklist != null) taskChecklist.FailGame();
                                 _audio?.Stop();
                                 yield break;
                             }
@@ -510,11 +473,8 @@ public class BirdStateController : MonoBehaviour
                 yield return null;
             }
 
-            // ====================== 新增：啄完进入空窗期，停音效 ======================
+            // 啄完停音，进入空窗期
             _audio?.Stop();
-            // ==================================================================
-
-            // 固定往左边飞出去
             float flyTimer = 0f;
             while (flyTimer < 2f)
             {
@@ -522,13 +482,11 @@ public class BirdStateController : MonoBehaviour
                 flyTimer += Time.deltaTime;
                 yield return null;
             }
-            // 飞完重置临时鸟位置、隐藏
             tempBird.SetActive(false);
             tempBird.transform.position = tempBirdStartPos;
         }
-        // 等2秒再让原鸟回原点（空窗期全程静音）
+        // 空窗期等鸟回来
         yield return new WaitForSeconds(birdReturnDelay);
-        // 原鸟归位（EnterIdle里会自动切回待机音效）
         currentAngryCoroutine = null;
         EnterIdle();
     }
