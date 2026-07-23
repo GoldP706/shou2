@@ -3999,9 +3999,6 @@ MonoBehaviour:
   flat: {fileID: 8353384060517103977, guid: eb39dcdc31fcd4fc3b32c79fcb2550bd, type: 3}
   side: {fileID: 1142130839, guid: 311119b4259cc4cd1b07546da6f811e1, type: 3}
   type: {fileID: -885510112, guid: fa977340873a94e79896a3c683306148, type: 3}
-  flatElbow: {fileID: 0}
-  sideElbow: {fileID: 0}
-  typeElbow: {fileID: 0}
 --- !u!1 &801841173
 GameObject:
   m_ObjectHideFlags: 0
@@ -4421,6 +4418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 209d81edcd5714f359b77ec2b9568b1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  winAudio: {fileID: 8300000, guid: 6f472b3fefd1d134dbde6bd34eee2ac0, type: 3}
+  loseAudio: {fileID: 8300000, guid: 2c028264e834fe847bf049eaf4621d88, type: 3}
+  bgm: {fileID: 728882561}
   tasks:
   - taskId: tetris
     checkMark: {fileID: 639960583}
@@ -4448,7 +4448,7 @@ MonoBehaviour:
       m_Calls: []
   pauseGameOnComplete: 1
   victoryDelay: 2
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 728882561}
   taskCompleteClip: {fileID: 0}
   gameFailureScreen: {fileID: 434448534}
   failureDelay: 1.5

@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class TaskChecklistUI : MonoBehaviour
 {
+    public AudioClip winAudio;
+    public AudioClip loseAudio;
+    public AudioSource bgm;
     [Serializable]
     public class TaskEntry
     {
@@ -218,6 +221,8 @@ public class TaskChecklistUI : MonoBehaviour
         if (gameCompleteScreen != null)
         {
             gameCompleteScreen.SetActive(true);
+            bgm.clip = winAudio;
+            bgm.loop = false;
         }
 
         onAllTasksCompleted?.Invoke();
@@ -258,6 +263,8 @@ public class TaskChecklistUI : MonoBehaviour
         if (gameFailureScreen != null)
         {
             gameFailureScreen.SetActive(true);
+            bgm.clip = loseAudio;
+            bgm.loop = false;
         }
         else
         {
