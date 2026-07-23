@@ -38,7 +38,7 @@ public class FlyMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(isDead);
+        //Debug.Log(isDead);
         RandomDrift();
         if(isDead){
             driftSpeed = 0;
